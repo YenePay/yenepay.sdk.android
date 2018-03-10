@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "C:\\Users\\Sisay Getnet\\Source\\yenepay_android\\ShopSimulator\\yeneSDK\\build\\intermediates\\res\\merged\\release\\color-v11\\abc_background_cache_hint_selector_material_dark.xml",
+        "source": "C:\\Users\\Sisay Getnet\\Source\\yenepay_android\\ShopSimulator\\yeneSDK\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\color-v11\\abc_background_cache_hint_selector_material_dark.xml"
+    },
+    {
+        "merged": "C:\\Users\\Sisay\\Source\\Repos\\yenepayMobileStore\\ShopSimulator\\yeneSDK\\build\\intermediates\\res\\merged\\release\\color-v11\\abc_background_cache_hint_selector_material_dark.xml",
+        "source": "C:\\Users\\Sisay\\Source\\Repos\\yenepayMobileStore\\ShopSimulator\\yeneSDK\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-alpha2\\res\\color-v11\\abc_background_cache_hint_selector_material_dark.xml"
+    },
+    {
+        "merged": "C:\\Users\\Sisay Getnet\\Source\\yenepay_android\\ShopSimulator\\yeneSDK\\build\\intermediates\\res\\merged\\release\\color-v11\\abc_background_cache_hint_selector_material_light.xml",
+        "source": "C:\\Users\\Sisay Getnet\\Source\\yenepay_android\\ShopSimulator\\yeneSDK\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\color-v11\\abc_background_cache_hint_selector_material_light.xml"
+    },
+    {
+        "merged": "C:\\Users\\Sisay\\Source\\Repos\\yenepayMobileStore\\ShopSimulator\\yeneSDK\\build\\intermediates\\res\\merged\\release\\color-v11\\abc_background_cache_hint_selector_material_light.xml",
+        "source": "C:\\Users\\Sisay\\Source\\Repos\\yenepayMobileStore\\ShopSimulator\\yeneSDK\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-alpha2\\res\\color-v11\\abc_background_cache_hint_selector_material_light.xml"
+    }
+]

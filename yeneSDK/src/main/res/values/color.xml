@@ -1,0 +1,6 @@
+<resources>
+	<color name="transparent">#00000000</color>
+	<color name="white">#ffffffff</color>
+	<color name="yenepay_blue">#005AAB</color>
+	<color name="yenepay_green">#C0D52F</color>
+</resources>

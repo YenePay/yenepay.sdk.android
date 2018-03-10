@@ -1,0 +1,98 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.sisay.shopsimulator.ItemDetailFragment"
+    android:padding="16dp">
+    <TextView
+        android:id="@+id/item_content"
+        style="?android:attr/textAppearanceLarge"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:textIsSelectable="true"
+        tools:text="Women shoes"
+        android:textStyle="normal|bold|italic" />
+<TextView
+    android:id="@+id/item_detail"
+    style="?android:attr/textAppearanceLarge"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:textIsSelectable="true"
+    tools:text="Quality women shoes - black, size 36"
+    android:textSize="18sp" />
+    <TextView
+        android:id="@+id/item_price"
+        style="?android:attr/textAppearanceLarge"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:textIsSelectable="true"
+        tools:text="400 Br."
+        android:gravity="right"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textSize="36sp"
+        android:textColor="@color/colorPrimaryDark" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/editMerchantCode"
+        android:text="E4HBBYXD" />
+
+    <Button
+        android:text="Pay via web"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnPayViaWeb"
+        android:layout_gravity="right" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/paymentInfoContainer"
+        android:visibility="gone">
+
+        <TextView
+            android:text="Payment Information"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtPaymentStatusLabel"
+            android:text="Status"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:gravity="center_horizontal" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtPaymentStatus"
+            android:gravity="center_horizontal"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display3"
+            tools:text="Completed" />
+
+        <TextView
+            android:text="Payment Response"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtObjDumpLabel"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/txtObjDump"
+            tools:text="response :PaymentResponse{customerEmail='Sisay.Kelkle@gmail.com', paymentOrderId='ZVMAIJLJ', orderCode='null', customerName='Sisay6 Getnet', merchantOrderId='a8a3abfc-b564-4d05-ac32-7538139a0185', merchantCode='E4HBBYXD', status=9, statusText='Paid', statusDescription='null', itemsTotal=400.0, discount=0.0, shippingFee=0.0, handlingFee=0.0, tax1=0.0, tax2=0.0, grandTotal=400.0, merchantCommisionFee=0.0, invoiceId='', invoiceUrl='null', itemsCount=0', customerCode=JLRL7AD1}"
+            android:padding="10dp" />
+    </LinearLayout>
+</LinearLayout>
