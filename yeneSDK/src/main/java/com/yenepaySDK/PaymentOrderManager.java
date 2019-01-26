@@ -101,7 +101,7 @@ public class PaymentOrderManager implements Serializable {
         payment.setIpnUrl(Constants.YENEPAY_IPN_URL);
         payment.setItems(getItems());
         String checkoutPath = YenePayUriParser.generateWebPaymentStringUri(payment);
-        Uri url = Uri.parse(URLDecoder.decode(checkoutPath));
+        Uri url = Uri.parse(Uri.decode(checkoutPath));
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(url);
         context.startActivityForResult(intent, 100);
