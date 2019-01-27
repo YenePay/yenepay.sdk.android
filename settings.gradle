@@ -1,1 +1,1 @@
-include ':app', ':yeneSDK'
+include ':app', ':yeneSDK', ':checkoutcounter'
