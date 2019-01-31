@@ -13,9 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.yenepaySDK.model.OrderedItem;
-
+import examples.mob.yenepay.com.checkoutcounter.store.CustomerOrder;
 import examples.mob.yenepay.com.checkoutcounter.store.StoreManager;
+import examples.mob.yenepay.com.checkoutcounter.viewmodels.CheckoutViewModel;
 
 public class CheckoutFragment extends Fragment {
 
@@ -29,6 +29,7 @@ public class CheckoutFragment extends Fragment {
     private TextView mHandlingFee;
     private TextView mShippingFee;
     private TextView mGrandTotal;
+    private TextView mStatus;
 
     public static CheckoutFragment newInstance() {
         return new CheckoutFragment();
@@ -46,6 +47,7 @@ public class CheckoutFragment extends Fragment {
         mHandlingFee = view.findViewById(R.id.txt_handling);
         mShippingFee = view.findViewById(R.id.txt_shipping);
         mGrandTotal = view.findViewById(R.id.txt_total);
+        mStatus = view.findViewById(R.id.txt_group_name);
         FloatingActionButton fab = view.findViewById(R.id.fab_add);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,18 +71,15 @@ public class CheckoutFragment extends Fragment {
 
         assert mRecyclerView != null;
         mViewModel.getOrderedItems().observe(this, orderedItems -> {
-            int count = 0;
-            double sum = 0, grandTotal = 0, tax = 0;
-            for (OrderedItem item: orderedItems){
-                count += item.getQuantity();
-                sum += item.getItemTotalPrice();
-            }
-            tax = sum * 0.15;
-            grandTotal = sum + tax;
-            mItemsCount.setText(String.format("%d Items", count));
-            mSubTotal.setText(Util.getFormattedAmt(sum));
-            mTax.setText(Util.getFormattedAmt(tax));
-            mGrandTotal.setText(Util.getFormattedAmt(grandTotal));
+            CustomerOrder order = StoreManager.generateCustomerOrder();
+            mItemsCount.setText(String.format("%d Items", order.getTotalQuantity()));
+            mSubTotal.setText(Util.getFormattedAmt(order.getItemsTotal()));
+            mDiscount.setText("(" + Util.getFormattedAmt(order.getDiscount()) + ")");
+            mHandlingFee.setText(Util.getFormattedAmt(order.getHandlingFee()));
+            mTax.setText(Util.getFormattedAmt(order.getTax()));
+            mShippingFee.setText(Util.getFormattedAmt(order.getShippingFee()));
+            mGrandTotal.setText(Util.getFormattedAmt(order.getGrandTotal()));
+            mStatus.setText(mViewModel.getStatus().getValue());
             setupRecyclerView((RecyclerView)mRecyclerView);
         });
 //        setupRecyclerView((RecyclerView) mRecyclerView);

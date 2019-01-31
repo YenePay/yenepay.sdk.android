@@ -10,7 +10,6 @@ import com.yenepaySDK.model.OrderedItem;
 import com.yenepaySDK.model.Payment;
 
 import java.io.Serializable;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +28,11 @@ public class PaymentOrderManager implements Serializable {
     private String merchantCode;
     private String merchantOrderId;
     private String paymentProcess = PROCESS_EXPRESS;
+    private double tax1;
+    private double tax2;
+    private double handlingFee;
+    private double discount;
+    private double shippingFee;
     private double itemsTotal;
     private Map<String, OrderedItem> items = new HashMap<String, OrderedItem>();
 
@@ -45,6 +49,46 @@ public class PaymentOrderManager implements Serializable {
 
     public void setMerchantCode(String merchantCode) {
         this.merchantCode = merchantCode;
+    }
+
+    public double getTax1() {
+        return tax1;
+    }
+
+    public void setTax1(double tax1) {
+        this.tax1 = tax1;
+    }
+
+    public double getTax2() {
+        return tax2;
+    }
+
+    public void setTax2(double tax2) {
+        this.tax2 = tax2;
+    }
+
+    public double getHandlingFee() {
+        return handlingFee;
+    }
+
+    public void setHandlingFee(double handlingFee) {
+        this.handlingFee = handlingFee;
+    }
+
+    public double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(double discount) {
+        this.discount = discount;
+    }
+
+    public double getShippingFee() {
+        return shippingFee;
+    }
+
+    public void setShippingFee(double shippingFee) {
+        this.shippingFee = shippingFee;
     }
 
     public String getMerchantOrderId() {
@@ -75,6 +119,12 @@ public class PaymentOrderManager implements Serializable {
         itemsTotal += item.getItemTotalPrice();
     }
 
+    public void addItems(List<OrderedItem> items){
+        for(OrderedItem item: items){
+            addItem(item);
+        }
+    }
+
     public double getItemsTotal() {
         return itemsTotal;
     }
@@ -87,6 +137,11 @@ public class PaymentOrderManager implements Serializable {
         args.putExtra(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_IPN_URL, Constants.YENEPAY_IPN_URL);
         args.putExtra(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_CANCEL_URL, Constants.YENEPAY_CANCEL_URL);
         args.putExtra(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_SUCCESS_URL, Constants.YENEPAY_SUCCESS_URL);
+        args.putExtra(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_TAX_1, this.tax1);
+        args.putExtra(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_TAX_2, this.tax2);
+        args.putExtra(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_DISCOUNT, this.discount);
+        args.putExtra(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_HANDLING_FEE, this.handlingFee);
+        args.putExtra(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_SHIPPING_FEE, this.shippingFee);
         args.putExtra(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_ITEMS, new ArrayList<OrderedItem>(getItems()));
         return args;
     }

@@ -41,6 +41,8 @@ public class YenePayUriParser {
     private static final String YENEPAY_TAX_2 = "Tax2";
     private static final String YENEPAY_ITEMS = "Items";
     private static final String YENEPAY_DISCOUNT = "Discount";
+    private static final String YENEPAY_HANDLING_FEE = "HandlingFee";
+    private static final String YENEPAY_SHIPPING_FEE = "ShippingFee";
     private static final String YENEPAY_CANCEL_URL = "CancelUrl";
     private static final String YENEPAY_SUCCESS_URL = "SuccessUrl";
     private static final String YENEPAY_FAILURE_URL = "FailureUrl";
@@ -92,6 +94,22 @@ public class YenePayUriParser {
         if(order.getFailureUrl() != null) {
             parameters.put(YENEPAY_FAILURE_URL, order.getFailureUrl());
         }
+        if(order.getTax1() != null) {
+            parameters.put(YENEPAY_TAX_1, String.valueOf(order.getTax1()));
+        }
+        if(order.getTax2() != null) {
+            parameters.put(YENEPAY_TAX_2, String.valueOf(order.getTax2()));
+        }
+        if(order.getDiscount() != null) {
+            parameters.put(YENEPAY_DISCOUNT, String.valueOf(order.getDiscount()));
+        }
+        if(order.getHandlingFee() != null) {
+            parameters.put(YENEPAY_HANDLING_FEE, String.valueOf(order.getHandlingFee()));
+        }
+        if(order.getShippingFee() != null) {
+            parameters.put(YENEPAY_SHIPPING_FEE, String.valueOf(order.getDiscount()));
+        }
+
         if(order.getProcess().equals(YENEPAY_PROCESS_EXPRESS) && order.getItems().size() == 1){
             OrderedItem singleItem = order.getItems().get(0);
             if(singleItem.getItemId() != null) {

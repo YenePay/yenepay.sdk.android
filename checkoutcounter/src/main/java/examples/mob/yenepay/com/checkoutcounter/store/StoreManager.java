@@ -1,5 +1,9 @@
 package examples.mob.yenepay.com.checkoutcounter.store;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+
 import com.yenepaySDK.model.OrderedItem;
 
 import java.util.ArrayList;
@@ -8,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import examples.mob.yenepay.com.checkoutcounter.R;
+import examples.mob.yenepay.com.checkoutcounter.StoreApp;
 
 /**
  * Helper class for providing sample content for user interfaces created by
@@ -84,33 +89,16 @@ public class StoreManager {
 
     }
 
-    /**
-     * A store item representing a piece of content.
-     */
-    public static class StoreItem {
-        public final String id;
-        public final String content;
-        public final String details;
-        public final double price;
-        public final int imageResId;
-        public final int largeImageResId;
+    public static CustomerOrder generateCustomerOrder(){
+        return new CustomerOrder(getStoreCode(), "Cart", ORDERS);
+    }
 
-        public StoreItem(String id, String content, String details, double price, int imageResId, int largeImageResId) {
-            this.id = id;
-            this.content = content;
-            this.details = details;
-            this.price = price;
-            this.imageResId = imageResId;
-            this.largeImageResId = largeImageResId;
-        }
+    private static String getStoreCode() {
+        return PreferenceManager.getDefaultSharedPreferences(StoreApp.getContext()).getString("account_no", null);
+    }
 
-        @Override
-        public String toString() {
-            return "StoreItem{" +
-                    "content='" + content + '\'' +
-                    ", price=" + price +
-                    '}';
-        }
+    public static CustomerOrder getNewOrder(String orderId, String nounce) {
+        return generateCustomerOrder();
     }
 
 

@@ -19,7 +19,18 @@ android {
             useSupportLibrary true
         }
         vectorDrawables.useSupportLibrary = true
-
+        packagingOptions {
+            exclude "META-INF/DEPENDENCIES.txt"
+            exclude "META-INF/DEPENDENCIES"
+            exclude "META-INF/dependencies.txt"
+            exclude "META-INF/LICENSE.txt"
+            exclude "META-INF/LICENSE"
+            exclude "META-INF/license.txt"
+            exclude "META-INF/LGPL2.1"
+            exclude "META-INF/NOTICE.txt"
+            exclude "META-INF/NOTICE"
+            exclude "META-INF/ASL2.0"
+        }
     }
 
     buildTypes {
@@ -33,6 +44,7 @@ android {
         targetCompatibility = '1.8'
     }
 
+
 }
 
 dependencies {
@@ -42,7 +54,16 @@ dependencies {
     implementation 'com.android.support:support-v4:28.0.0'
     implementation 'com.android.support:recyclerview-v7:28.0.0'
     implementation 'com.android.support:design:28.0.0'
-    implementation 'android.arch.lifecycle:extensions:1.1.1'
+    implementation "android.arch.lifecycle:extensions:$rootProject.archLifecycleVersion"
+    implementation 'com.android.support:support-vector-drawable:28.0.0'
+    annotationProcessor "android.arch.lifecycle:compiler:$rootProject.archLifecycleVersion"
+    implementation 'org.nanohttpd:nanohttpd:2.3.1'
+    implementation 'org.codehaus.jackson:jackson-mapper-asl:1.9.0'
+
+    implementation "android.arch.persistence.room:runtime:$rootProject.roomVersion"
+    annotationProcessor "android.arch.persistence.room:compiler:$rootProject.roomVersion"
+    androidTestImplementation "android.arch.persistence.room:testing:$rootProject.roomVersion"
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'

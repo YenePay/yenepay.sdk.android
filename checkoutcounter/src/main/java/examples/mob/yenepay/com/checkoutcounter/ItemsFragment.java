@@ -12,7 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import examples.mob.yenepay.com.checkoutcounter.store.StoreManager;
+import examples.mob.yenepay.com.checkoutcounter.store.StoreItem;
+import examples.mob.yenepay.com.checkoutcounter.viewmodels.ItemsViewModel;
 
 public class ItemsFragment extends Fragment {
 
@@ -39,7 +40,7 @@ public class ItemsFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(ItemsViewModel.class);
 
-        mViewModel.getUsers().observe(this, items -> {
+        mViewModel.getAllItems().observe(this, items -> {
             // update UI
 
             mListView.setAdapter(new SimpleItemRecyclerViewAdapter(mListner, items, false));
@@ -58,7 +59,7 @@ public class ItemsFragment extends Fragment {
     }
 
     public interface OnItemSelectedListner{
-        void onItemSelected(StoreManager.StoreItem item, int quantity);
+        void onItemSelected(StoreItem item, int quantity);
     }
 
 

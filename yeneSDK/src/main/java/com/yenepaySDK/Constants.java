@@ -11,5 +11,5 @@ public class Constants {
     public static final String YENEPAY_IPN_URL = STORE_DOMAIN + "Home/Completed";
     public static final String YENEPAY_SUCCESS_URL = STORE_DOMAIN + "Home/IPN";
     public static final String YENEPAY_CANCEL_URL = STORE_DOMAIN + "Home/Cancelled";
-    public static final String CHECKOUT_SERVER_URL = "";
+    public static final String CHECKOUT_SERVER_URL = "https://www.yenepay.com/checkout/";
 }

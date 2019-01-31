@@ -2,11 +2,13 @@ package com.yenepaySDK;
 
 import android.text.TextUtils;
 
+import java.io.Serializable;
+
 /**
  * Created by Sisay on 2/5/2017.
  */
 
-public class PaymentResponse {
+public class PaymentResponse implements Serializable {
     public static final int CANCELED = 3;
     public static final int ERROR = 4;
     public static final int UNKOWN = 7;

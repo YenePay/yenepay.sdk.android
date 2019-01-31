@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import examples.mob.yenepay.com.checkoutcounter.store.StoreItem;
 import examples.mob.yenepay.com.checkoutcounter.store.StoreManager;
 
 /**
@@ -27,7 +28,7 @@ public class ItemDetailFragment extends Fragment {
     /**
      * The dummy content this fragment is presenting.
      */
-    private StoreManager.StoreItem mItem;
+    private StoreItem mItem;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the

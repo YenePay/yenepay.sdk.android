@@ -9,18 +9,18 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import examples.mob.yenepay.com.checkoutcounter.store.StoreManager;
+import examples.mob.yenepay.com.checkoutcounter.store.StoreItem;
 
 public class SimpleItemRecyclerViewAdapter
         extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
     private final ItemsFragment.OnItemSelectedListner mListner;
-    private final List<StoreManager.StoreItem> mValues;
+    private final List<StoreItem> mValues;
     private final boolean mTwoPane;
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            StoreManager.StoreItem item = (StoreManager.StoreItem) view.getTag();
+            StoreItem item = (StoreItem) view.getTag();
             mListner.onItemSelected(item, 1);
 //            if (mTwoPane) {
 //                Bundle arguments = new Bundle();
@@ -41,7 +41,7 @@ public class SimpleItemRecyclerViewAdapter
     };
 
     SimpleItemRecyclerViewAdapter(ItemsFragment.OnItemSelectedListner parent,
-                                  List<StoreManager.StoreItem> items,
+                                  List<StoreItem> items,
                                   boolean twoPane) {
         mValues = items;
         mListner = parent;
@@ -72,7 +72,7 @@ public class SimpleItemRecyclerViewAdapter
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        StoreManager.StoreItem mItem;
+        StoreItem mItem;
         final ImageView mImageView;
         final TextView mIdView;
         final TextView mContentView;

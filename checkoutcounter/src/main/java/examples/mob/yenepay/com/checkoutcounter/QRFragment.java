@@ -1,11 +1,18 @@
 package examples.mob.yenepay.com.checkoutcounter;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.wifi.WpsInfo;
+import android.net.wifi.p2p.WifiP2pConfig;
+import android.net.wifi.p2p.WifiP2pDevice;
+import android.net.wifi.p2p.WifiP2pDeviceList;
+import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,13 +20,30 @@ import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
+import android.widget.Toast;
 
-public class QRFragment extends Fragment {
+import java.util.ArrayList;
+import java.util.List;
+
+import examples.mob.yenepay.com.checkoutcounter.store.CustomerOrder;
+import examples.mob.yenepay.com.checkoutcounter.store.StoreManager;
+import examples.mob.yenepay.com.checkoutcounter.viewmodels.CheckoutViewModel;
+import examples.mob.yenepay.com.checkoutcounter.viewmodels.QrViewModel;
+import examples.mob.yenepay.com.checkoutcounter.wifiP2P.DeviceActionListener;
+
+public class QRFragment extends Fragment implements
+        WifiP2pManager.PeerListListener,
+        PeerDeviceRecyclerViewAdapter.OnDeviceSelectedListner {
 
     private QrViewModel mViewModel;
     private WebView webView;
     private CheckoutViewModel mCheckoutViewModel;
     private String mQRURI;
+    private DeviceActionListener mListner;
+    private Button mBtnConnect;
+    private RecyclerView mPeers;
+    private WifiP2pDevice mSelectedDevice;
 
     public static QRFragment newInstance() {
         return new QRFragment();
@@ -30,6 +54,8 @@ public class QRFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.qr_fragment, container, false);
         webView = view.findViewById(R.id.qrwebView);
+
+        mBtnConnect = view.findViewById(R.id.btn_connect);
         WebSettings settings = this.webView.getSettings();
         settings.setBuiltInZoomControls(false);
         settings.setLoadWithOverviewMode(false);
@@ -54,9 +80,15 @@ public class QRFragment extends Fragment {
                 Log.e((String)"Error loading page", string2);
             }
         });
-
+        mPeers = view.findViewById(R.id.peers_list);
         mQRURI = "file:///android_asset/html/qr.html#uri=%s&size=%s";
-
+        mBtnConnect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mListner.dicoverPeers();
+//                mListner.connect(null);
+            }
+        });
         return view;
     }
 
@@ -65,8 +97,63 @@ public class QRFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(QrViewModel.class);
         mCheckoutViewModel = ViewModelProviders.of(getActivity()).get(CheckoutViewModel.class);
-        webView.loadUrl(mQRURI);
+        CustomerOrder customerOrder = StoreManager.generateCustomerOrder();
+        mCheckoutViewModel.getDeviceAddress().observe(this, address -> {
+            if(address != "Not Started") {
+                loadQRWebView(customerOrder, address);
+            } else {
+                mListner.connect(null);
+            }
+        });
+
+
         // TODO: Use the ViewModel
     }
 
+    private void loadQRWebView(CustomerOrder customerOrder, String address) {
+        String size = mCheckoutViewModel.isTwoPane().getValue()? "500" : "300";
+        Toast.makeText(QRFragment.this.getContext(), "Group Address - " + address, Toast.LENGTH_LONG);
+        webView.loadUrl(String.format(mQRURI,
+                customerOrder.getQRPaymentUri(address, CheckoutActivity.SERVER_PORT), size));
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mListner = (DeviceActionListener) context;
+        } catch (Exception e){
+            throw new IllegalArgumentException("Activity must implement DeviceActionListener interface");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+    }
+
+    @Override
+    public void onPeersAvailable(WifiP2pDeviceList wifiP2pDeviceList) {
+        bindDevicesList(wifiP2pDeviceList);
+    }
+
+    private void bindDevicesList(WifiP2pDeviceList wifiP2pDeviceList) {
+        List<WifiP2pDevice> list = new ArrayList<>();
+        list.addAll(wifiP2pDeviceList.getDeviceList());
+        mPeers.setAdapter(new PeerDeviceRecyclerViewAdapter(this, list, mCheckoutViewModel.isTwoPane().getValue()));
+    }
+
+    @Override
+    public void onDeviceSelected(WifiP2pDevice device) {
+        WifiP2pConfig config = new WifiP2pConfig();
+        config.deviceAddress = device.deviceAddress;
+        config.wps.setup = WpsInfo.PBC;
+        mSelectedDevice = device;
+        mListner.connect(config);
+    }
+
+
+    public WifiP2pDevice getDevice() {
+        return mSelectedDevice;
+    }
 }
