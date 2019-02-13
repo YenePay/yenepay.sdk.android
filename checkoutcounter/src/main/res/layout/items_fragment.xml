@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ItemsFragment">
+    tools:context=".ui.item.ItemsFragment">
     <android.support.v7.widget.RecyclerView
         android:id="@+id/item_list"
-        android:name="examples.mob.yenepay.com.checkoutcounter.ItemListFragment"
+        android:name="examples.mob.yenepay.com.checkoutcounter.ui.item.ItemListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="android.support.v7.widget.GridLayoutManager"

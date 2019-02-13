@@ -1,14 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ItemEditFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="spinnerCallback"
+            type="android.widget.AdapterView.OnItemSelectedListener"/>
+        <variable
+            name="callback"
+            type="examples.mob.yenepay.com.checkoutcounter.ui.item.OnItemInteractionListner"/>
+        <variable
+            name="itemViewModel"
+            type="examples.mob.yenepay.com.checkoutcounter.viewmodels.ItemViewModel"/>
+    </data>
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
-
-</FrameLayout>
+        android:layout_height="match_parent">
+        <include
+            android:id="@+id/detail"
+            layout="@layout/product_detai_edit_item"
+            app:itemViewModel="@{itemViewModel}"
+            app:product="@{itemViewModel.storeItem}"
+            app:callback="@{callback}"
+            app:spinnerCallback="@{spinnerCallback}"/>
+    </LinearLayout>
+</layout>

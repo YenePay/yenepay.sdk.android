@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="deleteCallback"
+            type="examples.mob.yenepay.com.checkoutcounter.ui.category.CategoryClickCallback"/>
+        <variable
+            name="callback"
+            type="examples.mob.yenepay.com.checkoutcounter.ui.category.CategoryClickCallback"/>
+        <variable
+            name="category"
+            type="examples.mob.yenepay.com.checkoutcounter.db.entity.ItemCategory"/>
+    </data>
+    <android.support.design.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp">
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/product_constraint"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="24dp">
+
+            <RelativeLayout
+                android:id="@+id/title_container"
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                android:background="@color/colorPrimaryDark"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/txt_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginBottom="16dp"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="4dp"
+                    android:text='@{category.name}'
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+                    android:textColor="@color/white"
+                    tools:text="Product 1" />
+            </RelativeLayout>
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/edit_category_fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="16dp"
+                android:clickable="true"
+                android:contentDescription="@string/edit_item"
+                android:onClick="@{() ->  callback.onProductClick(category)}"
+                android:tint="@color/white"
+                app:fabSize="mini"
+                app:layout_constraintBottom_toTopOf="@+id/txt_description"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/title_container"
+                app:srcCompat="@drawable/ic_edit_black_24dp" />
+
+            <TextView
+                android:id="@+id/txt_description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:paddingLeft="16dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="24dp"
+                android:text="@{category.description}"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                app:layout_constraintEnd_toStartOf="@+id/edit_category_fab"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/title_container"
+                tools:text="For this simple example, the Repository doesn't do much. See the" />
+
+            <android.support.design.button.MaterialButton
+                android:id="@+id/button"
+                style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:onClick="@{() ->  deleteCallback.onProductClick(category)}"
+                android:text="Delete"
+                app:icon="@drawable/ic_delete_forever_black_24dp"
+                app:iconPadding="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txt_description" />
+        </android.support.constraint.ConstraintLayout>
+    </android.support.design.card.MaterialCardView>
+</layout>

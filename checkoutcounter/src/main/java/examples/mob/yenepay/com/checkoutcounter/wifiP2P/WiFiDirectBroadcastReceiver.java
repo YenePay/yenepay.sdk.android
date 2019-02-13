@@ -20,15 +20,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.NetworkInfo;
-import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
-import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
 import android.util.Log;
 
-import examples.mob.yenepay.com.checkoutcounter.CheckoutActivity;
-import examples.mob.yenepay.com.checkoutcounter.QRFragment;
-import examples.mob.yenepay.com.checkoutcounter.R;
+import examples.mob.yenepay.com.checkoutcounter.ui.checkout.CheckoutActivity;
 
 /**
  * A BroadcastReceiver that notifies of important wifi p2p events.

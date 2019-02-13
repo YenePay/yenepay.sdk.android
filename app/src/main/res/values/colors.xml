@@ -4,4 +4,5 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#C0D52F</color>
     <color name="yenepay_green">#C0D52F</color>
+    <color name="transparent">#00c0d52f</color>
 </resources>

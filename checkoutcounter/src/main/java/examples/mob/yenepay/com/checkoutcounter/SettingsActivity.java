@@ -179,6 +179,7 @@ public class SettingsActivity extends PreferenceActivity {
             // guidelines.
             bindPreferenceSummaryToValue(findPreference("store_name"));
             bindPreferenceSummaryToValue(findPreference("account_no"));
+            bindPreferenceSummaryToValue(findPreference("vat_type"));
         }
 
         @Override

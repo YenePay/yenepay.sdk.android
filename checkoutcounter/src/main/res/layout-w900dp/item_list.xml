@@ -10,7 +10,7 @@
     android:divider="?android:attr/dividerHorizontal"
     android:orientation="horizontal"
     android:showDividers="middle"
-    tools:context=".CheckoutActivity">
+    tools:context=".ui.checkout.CheckoutActivity">
 
     <!--
     This layout is a two-pane layout for the Items

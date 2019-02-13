@@ -16,8 +16,6 @@ import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
-import examples.mob.yenepay.com.checkoutcounter.CheckoutActivity;
-
 /**
  * A service that process each file transfer request i.e Intent by opening a
  * socket connection with the WiFi Direct Group Owner and writing the file

@@ -1,9 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ManageItemFragment">
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="deleteCallback"
+            type="examples.mob.yenepay.com.checkoutcounter.ui.item.ProductClickCallback"/>
+        <variable
+            name="callback"
+            type="examples.mob.yenepay.com.checkoutcounter.ui.item.ProductClickCallback"/>
+        <variable
+            name="itemViewModel"
+            type="examples.mob.yenepay.com.checkoutcounter.viewmodels.ItemViewModel"/>
+    </data>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <include layout="@layout/product_detail_item"
+            app:product="@{itemViewModel.storeItem}"
+            app:callback="@{callback}"
+            app:deleteCallback="@{deleteCallback}"/>
+    </LinearLayout>
+</layout>
 
-</android.support.constraint.ConstraintLayout>

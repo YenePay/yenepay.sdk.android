@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="examples.mob.yenepay.com.checkoutcounter.ManageItemsActivity">
+    tools:context="examples.mob.yenepay.com.checkoutcounter.ui.item.ManageItemsActivity">
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"

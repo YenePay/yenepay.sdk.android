@@ -13,6 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,8 +27,11 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import examples.mob.yenepay.com.checkoutcounter.store.CustomerOrder;
+import examples.mob.yenepay.com.checkoutcounter.db.entity.CustomerOrder;
+import examples.mob.yenepay.com.checkoutcounter.db.model.Order;
 import examples.mob.yenepay.com.checkoutcounter.store.StoreManager;
+import examples.mob.yenepay.com.checkoutcounter.ui.PeerDeviceRecyclerViewAdapter;
+import examples.mob.yenepay.com.checkoutcounter.ui.checkout.CheckoutActivity;
 import examples.mob.yenepay.com.checkoutcounter.viewmodels.CheckoutViewModel;
 import examples.mob.yenepay.com.checkoutcounter.viewmodels.QrViewModel;
 import examples.mob.yenepay.com.checkoutcounter.wifiP2P.DeviceActionListener;
@@ -97,24 +101,28 @@ public class QRFragment extends Fragment implements
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(QrViewModel.class);
         mCheckoutViewModel = ViewModelProviders.of(getActivity()).get(CheckoutViewModel.class);
-        CustomerOrder customerOrder = StoreManager.generateCustomerOrder();
+        Order customerOrder = mCheckoutViewModel.order.get();
+        customerOrder.initTotals();
+        mCheckoutViewModel.setDeviceAddress(null);
         mCheckoutViewModel.getDeviceAddress().observe(this, address -> {
-            if(address != "Not Started") {
-                loadQRWebView(customerOrder, address);
+            if(!TextUtils.isEmpty(address) && address != "Not Started") {
+                String ssid = mCheckoutViewModel.getDeviceName().getValue();
+                String passPhrase = mCheckoutViewModel.getPassPhrase().getValue();
+                loadQRWebView(customerOrder, address, ssid, passPhrase);
             } else {
-                mListner.connect(null);
+//                mListner.connect(null);
             }
         });
 
-
+        mListner.connect(null);
         // TODO: Use the ViewModel
     }
 
-    private void loadQRWebView(CustomerOrder customerOrder, String address) {
+    private void loadQRWebView(CustomerOrder customerOrder, String address, String ssid, String passPhrase) {
         String size = mCheckoutViewModel.isTwoPane().getValue()? "500" : "300";
-        Toast.makeText(QRFragment.this.getContext(), "Group Address - " + address, Toast.LENGTH_LONG);
+        Toast.makeText(QRFragment.this.getContext(), "Group Address - " + address, Toast.LENGTH_LONG).show();
         webView.loadUrl(String.format(mQRURI,
-                customerOrder.getQRPaymentUri(address, CheckoutActivity.SERVER_PORT), size));
+                customerOrder.getQRPaymentUri(address, CheckoutActivity.SERVER_PORT, ssid, passPhrase), size));
     }
 
     @Override

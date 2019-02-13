@@ -30,6 +30,7 @@ public class YenePayUriParser {
     private static final String YENEPAY_DOMAIN = "yenepay.com";
     private static final String YENEPAY_CHECKOUT_PATH = "Process";
     private static final String YENEPAY_MERCHANT_ID = "MerchantId";
+    private static final String YENEPAY_MERCHANT_ORDER_ID = "MerchantOrderId";
     private static final String YENEPAY_PROCESS = "Process";
     private static final String YENEPAY_PROCESS_CART = "Cart";
     private static final String YENEPAY_PROCESS_EXPRESS = "Express";
@@ -82,6 +83,9 @@ public class YenePayUriParser {
         Hashtable<String, String> parameters = new Hashtable<String, String>();
         parameters.put(YENEPAY_MERCHANT_ID, order.getMerchantId());
         parameters.put(YENEPAY_PROCESS, order.getProcess());
+        if(!TextUtils.isEmpty(order.getMerchantOrderId())){
+            parameters.put(YENEPAY_MERCHANT_ORDER_ID, order.getMerchantOrderId());
+        }
         if(order.getIpnUrl() != null) {
             parameters.put(YENEPAY_IPN_URL, order.getIpnUrl());
         }

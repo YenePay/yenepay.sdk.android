@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="examples.mob.yenepay.com.checkoutcounter">
 
+    <uses-feature android:name="android.hardware.wifi.direct" />
+
     <uses-permission
         android:name="android.permission.ACCESS_COARSE_LOCATION"
         android:required="true" />
@@ -14,10 +16,13 @@
     <uses-permission
         android:name="android.permission.INTERNET"
         android:required="true" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:name=".StoreApp"
@@ -28,24 +33,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".CheckoutActivity"
+            android:name=".ui.checkout.CheckoutActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".ItemDetailActivity"
+            android:name=".ui.item.ItemDetailActivity"
             android:label="@string/title_item_detail"
-            android:parentActivityName=".CheckoutActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:parentActivityName=".ui.checkout.CheckoutActivity"
+            android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="examples.mob.yenepay.com.checkoutcounter.CheckoutActivity" />
+                android:value="examples.mob.yenepay.com.checkoutcounter.ui.checkout.CheckoutActivity" />
         </activity>
 
         <provider
@@ -70,6 +69,7 @@
             android:enabled="true"
             android:exported="false" />
 
+        <!--
         <activity
             android:name=".WiFiDirectActivity"
             android:label="@string/title_activity_wi_fi_direct">
@@ -88,16 +88,53 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        -->
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" />
         <activity
-            android:name=".ManageItemsActivity"
+            android:name=".ui.item.ManageItemsActivity"
             android:label="@string/title_activity_manage_items"
-            android:parentActivityName=".CheckoutActivity">
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="examples.mob.yenepay.com.checkoutcounter.CheckoutActivity" />
+                android:value="examples.mob.yenepay.com.checkoutcounter.ui.checkout.CheckoutActivity" />
+        </activity>
+        <activity
+            android:name=".ui.category.ManageCategoriesActivity"
+            android:label="@string/title_activity_manage_categories"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="examples.mob.yenepay.com.checkoutcounter.ui.checkout.CheckoutActivity" />
+        </activity>
+        <activity
+            android:name=".ui.orders.ManageOrdersActivity"
+            android:label="@string/title_activity_manage_orders"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="examples.mob.yenepay.com.checkoutcounter.ui.checkout.CheckoutActivity" />
+        </activity>
+        <activity
+            android:name=".ScrollingActivity"
+            android:label="@string/title_activity_scrolling" />
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".HomeActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme">
+
         </activity>
     </application>
 

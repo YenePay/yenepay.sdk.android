@@ -1,7 +1,25 @@
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment"
-    android:name="examples.mob.yenepay.com.checkoutcounter.ItemsFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:layout="@layout/items_fragment" />
+    tools:layout="@layout/items_fragment">
+    <FrameLayout
+        android:id="@+id/items_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </FrameLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_add_new"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="16dp"
+        android:layout_weight="1"
+        android:clickable="true"
+        android:tint="@color/white"
+        app:fabSize="normal"
+        app:srcCompat="@drawable/ic_add_black_24dp" />
+
+</FrameLayout>

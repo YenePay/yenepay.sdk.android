@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="deleteCallback"
+            type="examples.mob.yenepay.com.checkoutcounter.ui.category.CategoryClickCallback"/>
+        <variable
+            name="callback"
+            type="examples.mob.yenepay.com.checkoutcounter.ui.category.CategoryClickCallback"/>
+        <variable
+            name="categoryViewModel"
+            type="examples.mob.yenepay.com.checkoutcounter.viewmodels.CategoryViewModel"/>
+    </data>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <include layout="@layout/product_detail_category"
+            app:category="@{categoryViewModel.categoryItem}"
+            app:callback="@{callback}"
+            app:deleteCallback="@{deleteCallback}"/>
+    </LinearLayout>
+</layout>
+

@@ -34,7 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static examples.mob.yenepay.com.checkoutcounter.CheckoutActivity.SERVER_PORT;
+import static examples.mob.yenepay.com.checkoutcounter.ui.checkout.CheckoutActivity.SERVER_PORT;
 
 public class WiFiDirectServicesActivity extends AppCompatActivity {
     private static final String TAG = "WiFiDirectActivity";

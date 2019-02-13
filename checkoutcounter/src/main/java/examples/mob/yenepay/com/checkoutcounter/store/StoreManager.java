@@ -1,8 +1,6 @@
 package examples.mob.yenepay.com.checkoutcounter.store;
 
-import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
 
 import com.yenepaySDK.model.OrderedItem;
 
@@ -13,6 +11,8 @@ import java.util.Map;
 
 import examples.mob.yenepay.com.checkoutcounter.R;
 import examples.mob.yenepay.com.checkoutcounter.StoreApp;
+import examples.mob.yenepay.com.checkoutcounter.db.entity.CustomerOrder;
+import examples.mob.yenepay.com.checkoutcounter.db.entity.StoreItem;
 
 /**
  * Helper class for providing sample content for user interfaces created by
@@ -46,12 +46,12 @@ public class StoreManager {
         /*for (int i = 1; i <= COUNT; i++) {
             addItem(createDummyItem(i));
         }*/
-        addItem(new StoreItem("1", "Fikir esike Mekabir", "Book - Fikir esike Mekabir by Haddis Alemayehu", 250, R.drawable.item1, R.drawable.item_large_1));
-        addItem(new StoreItem("2", "Women shoes", "Quality women shoes - black, size 36", 400, R.drawable.item2, R.drawable.item_large_2));
-        addItem(new StoreItem("3", "Nike Sniker", "Nike Sniker - white, size 42", 1500, R.drawable.item3, R.drawable.item_large_3));
-        addItem(new StoreItem("4", "Port wrist watch", "Original Port wrist watch black", 700, R.drawable.item4, R.drawable.item_large_4));
-        addItem(new StoreItem("5", "Electric stove", "Electric cooking stove 220 watt", 190.50, R.drawable.item5, R.drawable.item_large_5));
-        addItem(new StoreItem("6", "Women hand bag", "Leather women hand bag grey color", 250, R.drawable.item6, R.drawable.item_large_6));
+        addItem(new StoreItem("1", "Fikir esike Mekabir", "Book - Fikir esike Mekabir by Haddis Alemayehu", 250, null, R.drawable.item_large_1));
+        addItem(new StoreItem("2", "Women shoes", "Quality women shoes - black, size 36", 400, null, R.drawable.item_large_2));
+        addItem(new StoreItem("3", "Nike Sniker", "Nike Sniker - white, size 42", 1500, null, R.drawable.item_large_3));
+        addItem(new StoreItem("4", "Port wrist watch", "Original Port wrist watch black", 700, null, R.drawable.item_large_4));
+        addItem(new StoreItem("5", "Electric stove", "Electric cooking stove 220 watt", 190.50, null, R.drawable.item_large_5));
+        addItem(new StoreItem("6", "Women hand bag", "Leather women hand bag grey color", 250, null, R.drawable.item_large_6));
     }
 
     private static void addItem(StoreItem item) {
@@ -93,15 +93,20 @@ public class StoreManager {
         return new CustomerOrder(getStoreCode(), "Cart", ORDERS);
     }
 
-    private static String getStoreCode() {
-        return PreferenceManager.getDefaultSharedPreferences(StoreApp.getContext()).getString("account_no", null);
+    public static String getStoreCode() {
+        return PreferenceManager.getDefaultSharedPreferences(StoreApp.getContext()).getString("account_no", "0095");
     }
 
     public static CustomerOrder getNewOrder(String orderId, String nounce) {
         return generateCustomerOrder();
     }
+    public static String getStoreName() {
+        String defaultName = "Your-Store";
+        return PreferenceManager.getDefaultSharedPreferences(StoreApp.getContext()).getString("store_name", defaultName);
+    }
 
-
-
-
+    public static String getStoreTerminalName() {
+        String defaultName = "YenePay-" + getStoreCode() + "-Store-" + (int) (Math.random() * 100);
+        return PreferenceManager.getDefaultSharedPreferences(StoreApp.getContext()).getString("store_name", defaultName);
+    }
 }

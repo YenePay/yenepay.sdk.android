@@ -16,6 +16,7 @@ import com.yenepaySDK.PaymentResponse;
 import java.io.IOException;
 import java.net.Socket;
 
+import examples.mob.yenepay.com.checkoutcounter.store.StoreRepository;
 import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.util.ServerRunner;
 
@@ -38,7 +39,7 @@ public class PaymentService extends IntentService {
             String host = intent.getExtras().getString(EXTRAS_HOST_ADDRESS);
             int port = intent.getExtras().getInt(EXTRAS_HOST_PORT);
             if(mServer == null || mServer.getListeningPort() != port){
-                mServer = new StoreServer(host, port);
+                mServer = new StoreServer(StoreRepository.getInstance(getApplication()), host, port);
 
             } else if (!mServer.isAlive()){
                 mServer.stop();

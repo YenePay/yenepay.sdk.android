@@ -2,7 +2,9 @@ package examples.mob.yenepay.com.checkoutcounter.store;
 
 import android.os.AsyncTask;
 
-public class DatabaseAsyncTask<T> extends AsyncTask<T, Void, Void> {
+import examples.mob.yenepay.com.checkoutcounter.db.dao.BaseDao;
+
+public class DatabaseAsyncTask<T> extends AsyncTask<T, Void, long[]> {
     private BaseDao<T> mDao;
     private AsyncDbOperation mOperation;
     public DatabaseAsyncTask(BaseDao<T> dao, AsyncDbOperation operation){
@@ -10,18 +12,26 @@ public class DatabaseAsyncTask<T> extends AsyncTask<T, Void, Void> {
         mOperation = operation;
     }
     @Override
-    protected Void doInBackground(T... params) {
+    protected long[] doInBackground(T... params) {
+        long[] ids = null;
         switch (mOperation){
             case Delete:
                 mDao.deleteAll(params);
                 break;
             case Insert:
-                mDao.insertAll(params);
+                ids = mDao.insertAll(params);
                 break;
             case Update:
                 mDao.updateAll(params);
                 break;
+            case Custom:
+                ids = customOperation(mDao, params);
+                break;
         }
+        return ids;
+    }
+
+    protected long[] customOperation(BaseDao<T> dao, T... params){
         return null;
     }
 

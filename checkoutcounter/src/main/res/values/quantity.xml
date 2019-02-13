@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="items_count">
+        <item quantity="zero">No items added</item>
+        <item quantity="one">Only one item</item>
+        <item quantity="other">%d items</item>
+    </plurals>
+</resources>

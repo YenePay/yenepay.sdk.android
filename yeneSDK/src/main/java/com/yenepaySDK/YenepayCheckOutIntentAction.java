@@ -32,5 +32,5 @@ public class YenepayCheckOutIntentAction {
     public static final String YENEPAY_INTENT_EXTRA_COMMISION_FEE = "com.yenepay.android.action.COMMISION_FEE";
     public static final String YENEPAY_INTENT_EXTRA_INVOICE_ID = "com.yenepay.android.action.INVOICE_ID";
     public static final String YENEPAY_INTENT_EXTRA_CUSTOMER_CODE = "com.yenepay.android.action.CUSTOMER_CODE";
-    public static final String YENEPAY_INTENT_EXTRA_ORDER_CODE = "com.yenepay.android.action.ORDER_ID";
+    public static final String YENEPAY_INTENT_EXTRA_ORDER_CODE = "com.yenepay.android.action.ORDER_CODE";
 }
