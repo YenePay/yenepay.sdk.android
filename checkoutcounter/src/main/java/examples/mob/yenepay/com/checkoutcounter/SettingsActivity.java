@@ -21,6 +21,8 @@ import android.view.MenuItem;
 
 import java.util.List;
 
+import examples.mob.yenepay.com.checkoutcounter.utils.SettingUtil;
+
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
  * handset devices, settings are presented as a single list. On tablets,
@@ -157,8 +159,8 @@ public class SettingsActivity extends PreferenceActivity {
     protected boolean isValidFragment(String fragmentName) {
         return PreferenceFragment.class.getName().equals(fragmentName)
                 || GeneralPreferenceFragment.class.getName().equals(fragmentName)
-                || DataSyncPreferenceFragment.class.getName().equals(fragmentName)
-                || NotificationPreferenceFragment.class.getName().equals(fragmentName);
+                || OtherFeePreferenceFragment.class.getName().equals(fragmentName)
+                || DiscountPreferenceFragment.class.getName().equals(fragmentName);
     }
 
     /**
@@ -177,9 +179,9 @@ public class SettingsActivity extends PreferenceActivity {
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
-            bindPreferenceSummaryToValue(findPreference("store_name"));
-            bindPreferenceSummaryToValue(findPreference("account_no"));
-            bindPreferenceSummaryToValue(findPreference("vat_type"));
+            bindPreferenceSummaryToValue(findPreference(SettingUtil.PREF_KEY_STORE_NAME));
+            bindPreferenceSummaryToValue(findPreference(SettingUtil.PREF_KEY_ACCOUNT_NO));
+            bindPreferenceSummaryToValue(findPreference(SettingUtil.PREF_KEY_TAX_TYPE));
         }
 
         @Override
@@ -198,18 +200,19 @@ public class SettingsActivity extends PreferenceActivity {
      * activity is showing a two-pane settings UI.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class NotificationPreferenceFragment extends PreferenceFragment {
+    public static class DiscountPreferenceFragment extends PreferenceFragment {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_notification);
+            addPreferencesFromResource(R.xml.pref_discount);
             setHasOptionsMenu(true);
 
             // Bind the summaries of EditText/List/Dialog/Ringtone preferences
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
-            bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
+            bindPreferenceSummaryToValue(findPreference(SettingUtil.PREF_KEY_DISCOUNT_TYPE));
+            bindPreferenceSummaryToValue(findPreference(SettingUtil.PREF_KEY_DISCOUNT_AMOUNT));
         }
 
         @Override
@@ -228,18 +231,22 @@ public class SettingsActivity extends PreferenceActivity {
      * activity is showing a two-pane settings UI.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class DataSyncPreferenceFragment extends PreferenceFragment {
+    public static class OtherFeePreferenceFragment extends PreferenceFragment {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_data_sync);
+            addPreferencesFromResource(R.xml.pref_others);
             setHasOptionsMenu(true);
 
             // Bind the summaries of EditText/List/Dialog/Ringtone preferences
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
-            bindPreferenceSummaryToValue(findPreference("sync_frequency"));
+            bindPreferenceSummaryToValue(findPreference(SettingUtil.PREF_KEY_HANDLING_TYPE));
+            bindPreferenceSummaryToValue(findPreference(SettingUtil.PREF_KEY_HANDLING_AMOUNT));
+
+            bindPreferenceSummaryToValue(findPreference(SettingUtil.PREF_KEY_SHIPPING_TYPE));
+            bindPreferenceSummaryToValue(findPreference(SettingUtil.PREF_KEY_SHIPPING_AMOUNT));
         }
 
         @Override

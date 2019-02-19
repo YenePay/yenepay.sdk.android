@@ -102,7 +102,7 @@ public class QRFragment extends Fragment implements
         mViewModel = ViewModelProviders.of(this).get(QrViewModel.class);
         mCheckoutViewModel = ViewModelProviders.of(getActivity()).get(CheckoutViewModel.class);
         Order customerOrder = mCheckoutViewModel.order.get();
-        customerOrder.initTotals();
+//        customerOrder.initTotals();
         mCheckoutViewModel.setDeviceAddress(null);
         mCheckoutViewModel.getDeviceAddress().observe(this, address -> {
             if(!TextUtils.isEmpty(address) && address != "Not Started") {

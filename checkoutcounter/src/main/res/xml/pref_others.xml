@@ -1,0 +1,61 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- NOTE: Hide buttons to simplify the UI. Users can touch outside the dialog to
+         dismiss it. -->
+    <!-- NOTE: ListPreference's summary should be set to its value by the activity code. -->
+    <PreferenceCategory android:title="Handling Fee">
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="handling_enable"
+            android:title="Enable handling fee"/>
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/pref_fee_calc_type_titles"
+            android:entryValues="@array/pref_fee_calc_type_values"
+            android:key="handling_type"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:title="Fee calculation based on"
+            android:dependency="handling_enable"/>
+
+        <EditTextPreference
+            android:capitalize="words"
+            android:defaultValue="@null"
+            android:summary="Enter the handling fee amount"
+            android:inputType="number"
+            android:key="handling_amount"
+            android:maxLines="1"
+            android:dependency="handling_enable"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="Handling fee amount" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Shipping Fee">
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="shipping_enable"
+            android:title="Enable shipping fee"/>
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/pref_fee_calc_type_titles"
+            android:entryValues="@array/pref_fee_calc_type_values"
+            android:key="shipping_type"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:title="Fee calculation based on"
+            android:dependency="shipping_enable"/>
+
+        <EditTextPreference
+            android:capitalize="words"
+            android:defaultValue="@null"
+            android:summary="Enter the handling fee amount"
+            android:inputType="number"
+            android:key="shipping_amount"
+            android:maxLines="1"
+            android:dependency="shipping_enable"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="Shipping fee amount" />
+    </PreferenceCategory>
+</PreferenceScreen>

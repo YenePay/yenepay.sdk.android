@@ -22,6 +22,8 @@ import java.util.UUID;
 
 import examples.mob.yenepay.com.checkoutcounter.R;
 import examples.mob.yenepay.com.checkoutcounter.StoreApp;
+import examples.mob.yenepay.com.checkoutcounter.store.StoreManager;
+import examples.mob.yenepay.com.checkoutcounter.utils.SettingUtil;
 
 @Entity(tableName = "orders")
 public class CustomerOrder {
@@ -121,9 +123,19 @@ public class CustomerOrder {
             totalQuantity += item.getQuantity();
             itemsTotal += item.getItemTotalPrice();
         }
+        SettingUtil settings = SettingUtil.getInstance();
+        if(settings.isDiscountEnabled()) {
+            discount = settings.getDiscountAmount(itemsTotal);
+        }
+        if(settings.isHandlingEnabled()) {
+            handlingFee = settings.getHandlingAmount(itemsTotal);
+        }
         subTotal = itemsTotal - discount + handlingFee;
-        tax =  subTotal * 0.15;
+        tax =  settings.getTaxAmount(subTotal);
         total = subTotal + tax;
+        if(settings.isShippingEnabled()) {
+            shippingFee = settings.getShippingAmount(itemsTotal);
+        }
         grandTotal = total + shippingFee;
     }
 
@@ -247,6 +259,8 @@ public class CustomerOrder {
         builder.appendQueryParameter("sid", ssid);
         builder.appendQueryParameter("p", passPhrase);
         builder.appendQueryParameter("a", String.valueOf(grandTotal));
+        builder.appendQueryParameter("msn", StoreManager.getStoreName());
+        builder.appendQueryParameter("mc", StoreManager.getStoreCode());
         String string = builder.build().toString();
         Log.d(TAG, "getQRPaymentUri: QR URI Generated - " + string);
         return Uri.encode(string);
@@ -378,6 +392,4 @@ public class CustomerOrder {
         }
         return null;
     }
-
-
 }

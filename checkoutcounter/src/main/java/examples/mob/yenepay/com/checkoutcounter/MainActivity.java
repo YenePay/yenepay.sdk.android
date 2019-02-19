@@ -2,6 +2,8 @@ package examples.mob.yenepay.com.checkoutcounter;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.os.AsyncTask;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -16,6 +18,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+
+import com.yenepaySDK.verify.Verification;
 
 import examples.mob.yenepay.com.checkoutcounter.databinding.StoreHeaderBinding;
 import examples.mob.yenepay.com.checkoutcounter.ui.category.ManageCategoriesActivity;
@@ -45,6 +49,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.addHeaderView(mNavBinding.getRoot());
         mNavBinding.setTerminal(StoreApp.getStoreTerminal());
         mNavBinding.getTerminal().status.observe(this, status -> mNavBinding.invalidateAll());
+
+
 
         findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,7 +108,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+
+        new DownloadServerCertificateTask().execute();
         mDrawerToggle.syncState();
+    }
+
+    static class DownloadServerCertificateTask extends   AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            new Verification(StoreApp.getContext()).getPublicKey();
+            return null;
+        }
+    };
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
     }
 
     @Override

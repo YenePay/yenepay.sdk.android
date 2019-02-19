@@ -55,6 +55,7 @@ public class WifiConnection {
     WifiConfiguration wifiConfig = null;
     Context context = null;
     int netId = 0;
+    int prevNetId = -1;
 
     LocalBroadcastManager broadcaster;
     WiFiConnectionReceiver receiver;

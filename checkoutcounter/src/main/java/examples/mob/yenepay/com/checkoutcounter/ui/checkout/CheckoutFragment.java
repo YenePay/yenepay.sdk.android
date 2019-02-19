@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import examples.mob.yenepay.com.checkoutcounter.R;
 import examples.mob.yenepay.com.checkoutcounter.databinding.CheckoutSalesBinding;
 import examples.mob.yenepay.com.checkoutcounter.db.entity.CustomerOrder;
+import examples.mob.yenepay.com.checkoutcounter.db.model.Order;
 import examples.mob.yenepay.com.checkoutcounter.ui.OrderItemRecyclerViewAdapter;
 import examples.mob.yenepay.com.checkoutcounter.viewmodels.CheckoutViewModel;
 
@@ -163,7 +164,11 @@ public class CheckoutFragment extends Fragment {
         public void onProductClick(OrderedItem item) {
             if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
 //                mListner.onProductClick(item);
-                mBinding.getViewModel().removeItem(item);
+                CheckoutViewModel model = mBinding.getViewModel();
+                Order order = model.order.get();
+                if(order != null && order.isNew()) {
+                    model.removeItem(item);
+                }
             }
         }
     };

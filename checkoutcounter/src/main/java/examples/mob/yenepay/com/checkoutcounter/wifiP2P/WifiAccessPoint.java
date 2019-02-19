@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.NetworkInfo;
 
+import android.net.wifi.WifiManager;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pGroup;
 import android.net.wifi.p2p.WifiP2pInfo;
@@ -38,6 +39,7 @@ public class WifiAccessPoint implements
     static final public String DSS_WIFIAP_SERVERADDRESS = "test.microsoft.com.mywifimesh.DSS_WIFIAP_SERVERADDRESS";
     static final public String DSS_WIFIAP_INETADDRESS = "test.microsoft.com.mywifimesh.DSS_WIFIAP_INETADDRESS";
     public static final String SERVICE_TYPE = "_presence._tcp";
+    private final WifiManager wifiManager;
 
     WifiAccessPoint that = this;
     LocalBroadcastManager broadcaster;
@@ -56,10 +58,13 @@ public class WifiAccessPoint implements
     public WifiAccessPoint(Context Context) {
         this.context = Context;
         this.broadcaster = LocalBroadcastManager.getInstance(this.context);
+        this.wifiManager = (WifiManager)this.context.getSystemService(this.context.WIFI_SERVICE);
     }
 
     public void Start() {
-
+        if(!wifiManager.isWifiEnabled()){
+            wifiManager.setWifiEnabled(true);
+        }
         p2p = (WifiP2pManager) this.context.getSystemService(this.context.WIFI_P2P_SERVICE);
 
         if (p2p == null) {
@@ -81,6 +86,9 @@ public class WifiAccessPoint implements
 
                 public void onFailure(int reason) {
                     debug_print("Local Group failed, error code " + reason);
+                    if(reason == WifiP2pManager.WIFI_P2P_STATE_DISABLED){
+
+                    }
                 }
             });
         }

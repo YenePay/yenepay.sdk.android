@@ -4,6 +4,8 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.yenepaySDK.verify.Verification;
+
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
@@ -11,10 +13,10 @@ import org.codehaus.jackson.type.TypeReference;
 import java.io.IOException;
 import java.util.Map;
 
+import examples.mob.yenepay.com.checkoutcounter.StoreApp;
 import examples.mob.yenepay.com.checkoutcounter.db.entity.CustomerOrder;
 import examples.mob.yenepay.com.checkoutcounter.db.entity.PaymentResponseEntity;
 import examples.mob.yenepay.com.checkoutcounter.db.model.Order;
-import examples.mob.yenepay.com.checkoutcounter.store.StoreManager;
 import examples.mob.yenepay.com.checkoutcounter.store.StoreRepository;
 import fi.iki.elonen.NanoHTTPD;
 
@@ -134,16 +136,37 @@ public class StoreServer extends NanoHTTPD {
                 if(response != null){
                     Log.d(TAG, "getResponse: " + response);
                     //TODO: Validate payment response
-                    if(response.getMerchantCode() == null) {
+                    boolean validatedLocally = false;
+                    try {
+                        Map<String, String> parms = session.getParms();
+                        if(parms.containsKey("BuyerId")) {
+                            response.setBuyerId(parms.get("BuyerId"));
+                        }
+                        if(parms.containsKey("MerchantId")) {
+                            response.setMerchantId(parms.get("MerchantId"));
+                        }
+                        if(parms.containsKey("TransactionFee")) {
+                            response.setTransactionFee(Double.parseDouble(parms.get("TransactionFee")));
+                        }
+                        //TODO: remove this after SDK Push
+                        response.setSignature(response.getStatusDescription());
 
+                        validatedLocally = new Verification(StoreApp.getContext()).verify(response);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                    CustomerOrder order = mRepository.getOrderPOJO(response.getMerchantOrderId());
-                    if(order != null && order.setAppropriateStatus(response)){
-                        response.setOrderId(order.getId());
-                        mRepository.updateOrder(order);
-                        mRepository.insertPaymentResponse(response);
-                        return newFixedLengthResponse(Response.Status.OK, PLAIN_TEXT, SUCCESSFUL_MSG);
+                    if(validatedLocally) {
+                        CustomerOrder order = mRepository.getOrderPOJO(response.getMerchantOrderId());
+                        if(order != null && order.setAppropriateStatus(response)){
+                            response.setOrderId(order.getId());
+                            mRepository.updateOrder(order);
+                            mRepository.insertPaymentResponse(response);
+                            return newFixedLengthResponse(Response.Status.OK, PLAIN_TEXT, SUCCESSFUL_MSG);
+                        }
+                    } else {
+                        return badRequest("Bad Data");
                     }
+
                 }
             } catch (IOException e) {
                 e.printStackTrace();

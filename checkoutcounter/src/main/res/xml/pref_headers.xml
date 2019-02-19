@@ -1,20 +1,18 @@
 <preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- These settings headers are only used on tablets. -->
-
     <header
         android:fragment="examples.mob.yenepay.com.checkoutcounter.SettingsActivity$GeneralPreferenceFragment"
-        android:icon="@drawable/ic_info_black_24dp"
+        android:icon="@drawable/ic_settings_black_24dp"
         android:title="@string/pref_header_general" />
 
-    <!--<header-->
-        <!--android:fragment="examples.mob.yenepay.com.checkoutcounter.SettingsActivity$NotificationPreferenceFragment"-->
-        <!--android:icon="@drawable/ic_notifications_black_24dp"-->
-        <!--android:title="@string/pref_header_notifications" />-->
+    <header
+        android:fragment="examples.mob.yenepay.com.checkoutcounter.SettingsActivity$DiscountPreferenceFragment"
+        android:icon="@drawable/ic_add_shopping_cart_black_24dp"
+        android:title="Discount" />
 
-    <!--<header-->
-        <!--android:fragment="examples.mob.yenepay.com.checkoutcounter.SettingsActivity$DataSyncPreferenceFragment"-->
-        <!--android:icon="@drawable/ic_sync_black_24dp"-->
-        <!--android:title="@string/pref_header_data_sync" />-->
-
+    <header
+        android:fragment="examples.mob.yenepay.com.checkoutcounter.SettingsActivity$OtherFeePreferenceFragment"
+        android:icon="@drawable/ic_attach_money_black_24dp"
+        android:title="Other Fees" />
 </preference-headers>

@@ -30,7 +30,7 @@ import examples.mob.yenepay.com.checkoutcounter.db.entity.StoreItem;
         StoreItem.class,
         CustomerOrder.class,
         OrderedItemEntity.class,
-        PaymentResponseEntity.class}, version = 3)
+        PaymentResponseEntity.class}, version = 4)
 public abstract class StoreDatabase extends RoomDatabase {
 
     public static final String DATABASE_NAME = "store_app_database";

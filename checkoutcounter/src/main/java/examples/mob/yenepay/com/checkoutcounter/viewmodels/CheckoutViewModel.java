@@ -26,6 +26,7 @@ import examples.mob.yenepay.com.checkoutcounter.db.entity.StoreItem;
 import examples.mob.yenepay.com.checkoutcounter.db.model.Order;
 import examples.mob.yenepay.com.checkoutcounter.store.StoreManager;
 import examples.mob.yenepay.com.checkoutcounter.store.StoreRepository;
+import examples.mob.yenepay.com.checkoutcounter.utils.SettingUtil;
 
 public class CheckoutViewModel extends AndroidViewModel {
     private static final String TAG = "CheckoutViewModel";
@@ -43,6 +44,8 @@ public class CheckoutViewModel extends AndroidViewModel {
     private LiveData<Order> currentOrder;
     public final ObservableField<Order> order = new ObservableField<>();
 
+//    private SettingUtil mSetting;
+
     public CheckoutViewModel(@NonNull Application application) {
         super(application);
         mRepo = StoreRepository.getInstance(application);
@@ -51,6 +54,7 @@ public class CheckoutViewModel extends AndroidViewModel {
         passPhrase = new MutableLiveData<>();
         mObservableOrder = new MediatorLiveData<>();
         mObservableOrder.setValue(null);
+//        mSetting = SettingUtil.getInstance();
 //        initNewOrder();
 
     }
@@ -86,7 +90,7 @@ public class CheckoutViewModel extends AndroidViewModel {
 
     public void setOrder(Order order){
         if(order != null) {
-            order.initTotals();
+//            order.initTotals();
         }
         this.order.set(order);
     }
@@ -102,7 +106,8 @@ public class CheckoutViewModel extends AndroidViewModel {
             orderedItemEntity.setOrderId(order.getId());
             mRepo.insertOrderedItem(orderedItemEntity);
         }
-        order.initTotals();
+//        order.initTotals();
+//        mRepo.updateOrder(order);
     }
 
     public void removeItem(OrderedItem item){
@@ -115,7 +120,8 @@ public class CheckoutViewModel extends AndroidViewModel {
             } else if (existing.getQuantity() == 1) {
                 mRepo.deleteOrderedItem(existing);
             }
-            order.initTotals();
+//            order.initTotals();
+//            mRepo.updateOrder(order);
         }
     }
 
@@ -143,6 +149,7 @@ public class CheckoutViewModel extends AndroidViewModel {
         }
         return status;
     }
+
 
     public void setStatus(String status){
         this.status.setValue(status);

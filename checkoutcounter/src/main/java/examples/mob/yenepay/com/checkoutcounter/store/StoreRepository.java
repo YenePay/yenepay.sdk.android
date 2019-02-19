@@ -140,11 +140,12 @@ public class StoreRepository {
     }
 
     public void updateOrderedItem(OrderedItemEntity existing) {
-        new DatabaseAsyncTask<OrderedItemEntity>(mOrderedItemsDao, AsyncDbOperation.Update).execute(existing);
+//        new DatabaseAsyncTask<OrderedItemEntity>(mOrderedItemsDao, AsyncDbOperation.Update).execute(existing);
+        new AddOrUpdateOrderItemTask(mDatabase, AsyncDbOperation.Update).execute(existing);
     }
 
     public void insertOrderedItem(OrderedItemEntity orderedItemEntity) {
-        new DatabaseAsyncTask<OrderedItemEntity>(mOrderedItemsDao, AsyncDbOperation.Insert).execute(orderedItemEntity);
+        new AddOrUpdateOrderItemTask(mDatabase, AsyncDbOperation.Insert).execute(orderedItemEntity);
     }
 
     public void insertOrder(CustomerOrder order) {
@@ -152,7 +153,8 @@ public class StoreRepository {
     }
 
     public void deleteOrderedItem(OrderedItemEntity orderedItemEntity) {
-        new DatabaseAsyncTask<>(mOrderedItemsDao, AsyncDbOperation.Delete).execute(orderedItemEntity);
+//        new DatabaseAsyncTask<>(mOrderedItemsDao, AsyncDbOperation.Delete).execute(orderedItemEntity);
+        new AddOrUpdateOrderItemTask(mDatabase, AsyncDbOperation.Delete).execute(orderedItemEntity);
     }
 
     public void deleteAllOrders() {
@@ -179,6 +181,38 @@ public class StoreRepository {
             return null;
         }
     }
+
+    static class AddOrUpdateOrderItemTask extends AsyncTask<OrderedItemEntity, Void, Void> {
+        private final AsyncDbOperation mOperation;
+        StoreDatabase mRepo;
+
+        public AddOrUpdateOrderItemTask(StoreDatabase repo, AsyncDbOperation operation) {
+            mRepo = repo;
+            mOperation = operation;
+        }
+
+        @Override
+        protected Void doInBackground(OrderedItemEntity... params) {
+            OrderedItemEntity itemEntity = params[0];
+            if(itemEntity != null) {
+                mRepo.runInTransaction(() -> {
+                    if(mOperation == AsyncDbOperation.Insert){
+                        mRepo.orderedItemsDao().insert(itemEntity);
+                    } else if(mOperation == AsyncDbOperation.Update){
+                        mRepo.orderedItemsDao().update(itemEntity);
+                    } else if(mOperation == AsyncDbOperation.Delete){
+                        mRepo.orderedItemsDao().delete(itemEntity);
+                    }
+                    CustomerOrderDao orderDao = mRepo.customerOrderDao();
+                    Order order = orderDao.getOrderPOJO(itemEntity.getOrderId());
+                    order.initTotals();
+                    orderDao.update(order);
+                });
+            }
+            return null;
+        }
+    }
+
     static class InsertCategoryTask extends DatabaseAsyncTask<ItemCategory>{
         private OnCategoryCreated mCallback;
         public InsertCategoryTask(BaseDao<ItemCategory> dao, OnCategoryCreated callback) {

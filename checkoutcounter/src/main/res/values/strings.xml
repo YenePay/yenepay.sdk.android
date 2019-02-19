@@ -32,6 +32,15 @@
         <item>-1</item>
     </string-array>
 
+    <string-array name="pref_fee_calc_type_titles">
+        <item>Percentage</item>
+        <item>Fixed</item>
+    </string-array>
+    <string-array name="pref_fee_calc_type_values">
+        <item>1</item>
+        <item>0</item>
+    </string-array>
+
     <!-- Example settings for Data & Sync -->
     <string name="pref_header_data_sync">Data &amp; sync</string>
 
@@ -194,4 +203,5 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_example">Example action</string>
+    <string name="pref_title_enable_discount_switch">Enable discount</string>
 </resources>

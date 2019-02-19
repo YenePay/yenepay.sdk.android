@@ -115,7 +115,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
-                    android:text="@{@string/product_price2(order.subTotal)}"
+                    android:text="@{@string/product_price2(order.itemsTotal)}"
                     app:layout_constraintEnd_toEndOf="parent"
                     tools:text="2,350.00" />
 
@@ -132,26 +132,29 @@
                     android:id="@+id/txt_discount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
                     android:text="@{@string/product_price2(order.discount)}"
                     android:textColor="@color/colorAccent"
-                    app:layout_constraintEnd_toEndOf="@+id/txt_subtotal"
-                    app:layout_constraintTop_toTopOf="@+id/lbl_discount" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/lbl_discount"
+                    tools:text="0.00" />
 
                 <TextView
                     android:id="@+id/lbl_tax"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Tax (15%)"
+                    android:text="Tax"
                     app:layout_constraintStart_toStartOf="@+id/lbl_discount"
-                    app:layout_constraintTop_toBottomOf="@+id/lbl_discount" />
+                    app:layout_constraintTop_toBottomOf="@+id/lbl_handling" />
 
                 <TextView
                     android:id="@+id/txt_tax"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
                     android:text="@{@string/product_price2(order.tax)}"
-                    app:layout_constraintEnd_toEndOf="@+id/txt_discount"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/lbl_tax"
                     tools:text="345.00" />
 
@@ -162,15 +165,17 @@
                     android:layout_marginTop="8dp"
                     android:text="Handling Fee"
                     app:layout_constraintStart_toStartOf="@+id/lbl_tax"
-                    app:layout_constraintTop_toBottomOf="@+id/lbl_tax" />
+                    app:layout_constraintTop_toBottomOf="@+id/lbl_discount" />
 
                 <TextView
                     android:id="@+id/txt_handling"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
                     android:text="@{@string/product_price2(order.handlingFee)}"
-                    app:layout_constraintEnd_toEndOf="@+id/txt_tax"
-                    app:layout_constraintTop_toTopOf="@+id/lbl_handling" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/lbl_handling"
+                    tools:text="0.00" />
 
                 <TextView
                     android:id="@+id/lbl_shipping"
@@ -179,15 +184,17 @@
                     android:layout_marginTop="8dp"
                     android:text="Shipping Fee"
                     app:layout_constraintStart_toStartOf="@+id/lbl_handling"
-                    app:layout_constraintTop_toBottomOf="@+id/lbl_handling" />
+                    app:layout_constraintTop_toBottomOf="@+id/lbl_tax" />
 
                 <TextView
                     android:id="@+id/txt_shipping"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
                     android:text="@{@string/product_price2(order.shippingFee)}"
-                    app:layout_constraintEnd_toEndOf="@+id/txt_handling"
-                    app:layout_constraintTop_toTopOf="@+id/lbl_shipping" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/lbl_shipping"
+                    tools:text="0.00" />
             </android.support.constraint.ConstraintLayout>
 
         </android.support.design.card.MaterialCardView>

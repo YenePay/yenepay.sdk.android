@@ -37,7 +37,7 @@
         android:defaultValue="-1"
         android:entries="@array/pref_example_list_titles"
         android:entryValues="@array/pref_example_list_values"
-        android:key="vat_type"
+        android:key="tax_type"
         android:negativeButtonText="@null"
         android:positiveButtonText="@null"
         android:title="Included Tax" />
