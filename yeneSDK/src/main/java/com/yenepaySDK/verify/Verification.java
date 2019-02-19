@@ -54,6 +54,7 @@ public class Verification {
     public static final String SERVER_KEY_STORE_NAME = "server";
     public static final String YP_PUBLIC_KEY_ALIAS = "yp_public";
     public static final String HOST_NAME = "www.yenepay.com";
+//    public static final String HOST_NAME = "192.168.137.1";
     private Context mContext;
     private PasswordProtectionHandler mProtectionHandler;
     private char[] password = "y3n3p6y".toCharArray();
@@ -88,16 +89,6 @@ public class Verification {
         try {
             InputStream signatureData = new ByteArrayInputStream(dataSignature);
             InputStream data = new ByteArrayInputStream(dataString.getBytes(Charset.forName("UTF8")));
-//            final PemObject publicKeyPem = reader.readPemObject();
-//            final byte[] publicKeyBytes = publicKeyString;
-//            ASN1Primitive asn1Primitive = new ASN1InputStream(publicKeyBytes).readObject();
-//            PemObject pemObject = new PemReader(new StringReader(publicKeyString)).readPemObject();
-//            org.bouncycastle.asn1.pkcs.RSAPublicKey rsaPub = org.bouncycastle.asn1.pkcs.RSAPublicKey.getInstance(asn1Primitive);
-//            final KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-//            final X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publicKeyBytes);
-//            final RSAPublicKey publicKey = (RSAPublicKey) keyFactory.generatePublic(
-//                    new RSAPublicKeySpec(rsaPub.getModulus(), rsaPub.getPublicExponent()));
-//            PublicKey publicKey1 = keyFactory.generatePublic(publicKeySpec);
             final RSAPublicKey publicKey = getPublicKey();
 
             final Signature signature = Signature.getInstance("SHA1withRSA");

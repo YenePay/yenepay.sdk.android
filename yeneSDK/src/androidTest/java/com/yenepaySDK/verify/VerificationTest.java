@@ -47,10 +47,10 @@ public class VerificationTest {
     @Before
     public void setUp() throws Exception {
         validData[0] = testPublicKey;
-        validData[1] = "TotalAmount=2.00&BuyerId=37b20de1-5e1f-443f-b575-3ea79dc1b9f2&MerchantOrderId=9e2bc816-0287-4301-9ebc-2f74dca78d8e&MerchantId=02e1aaa5-ed29-408e-a24b-eddd665c3e8f&MerchantCode=0325&TransactionCode=14493&TransactionId=c2dede26-ad53-43ee-9b27-a51b84c6b87a&Status=9&Currency=ETB";
+        validData[1] = "TotalAmount=2.00&BuyerId=7354&MerchantOrderId=9e2bc816-0287-4301-9ebc-2f74dca78d8e&MerchantCode=0325&TransactionCode=14493&TransactionId=c2dede26-ad53-43ee-9b27-a51b84c6b87a&Status=9&Currency=ETB";
 //        validData[1] = "TotalAmount=2";
 //        validData[1] = "TotalAmount=2.00&BuyerId=37b20de1-5e1f-443f-b575-3ea79dc1b9f2&MerchantOrderId=9e2bc816-0287-4301-9ebc-2f74dca78d8e&MerchantId=02e1aaa5-ed29-408e-a24b-eddd665c3e8f&MerchantCode=0325&TransactionCode=14493&TransactionId=c2dede26-ad53-43ee-9b27-a51b84c6b87a&Status=9&Currency=ETB";
-        validData[2] = "LPq0LhZo4JrFudjVXuYbZAq/znTQbJl/sylDDRdLBPASgJVd4dDd7LbpWPEKorBhqdGOB2xwNW0ED7tbvAjSWtlb2DCTuBts0omD/KRy/UySR36AOLewwzwlIcBoQpJl/VKWxuFpq87FK/SATeHGeBmfCg5FxePa/smJymUfvoexvrI09XBMb3f3BmZr/xyi31AUgkzDIzP+p3utqvks4VyWypzELLEl/NkN3IZ6INpluIrKaHBSI6xGO4afCl6Fce2HyegFUOTrK02AcnL+vZnmSCHosEu3j2TsWnXHjAlMCQWziVj6FYVSuFEqfs7FDqrtKmKddqkOS9OJnet/Yw==";
+        validData[2] = "mP/EAk/GYjpcIozEvK2wqOkmTew5bUyty/18fU6ldG2PobsRTvo6uRvuwAHL32qZXqt6AIa0TrsHIh1wP9JqIy9sph3hdkC3Gu+vKFthDo4yTN5nYdi4dFYyhCDve8OOzLHbEaCyrxZl2cBPAS5xTpXmhj/39aZY9kY+0eC16lWPXmlI5yrS3R4kOzpMCzC2IjzhUc/wZ793/4Lk3TlcmY62bPVJWJ15pYU+HOEgYUzjcuRNsyEw3iNalHNkwChcNY+EX+47Eht3ELQDURm4K7xZdSP1IYpTyu4M54AymS8rGS8mu3sBh5IelM8I3AQ5KjKWkV0byyXA0ZE9febhyQ==";
 //        validData[2] = "m/5yILXByw88mYsbxv+lJzRVebfUdFcade1WdrseVRTcumLz2UQvCLSROQmazrA5RdTKlbKa3/B9viO+yw9E6p62lcHZCeFgaKTswzyi1+5DJr6bXRKwolXDvI4qNhaDGhdDLzoj7iujtYdEqSgaeUppcmq8SgfuMh4BytoLr6Yj1DOZgqvI+rkX61WiU/VAm24vpL2JsWO3w3pvuWyC19SQngq7jC9w4ex+HGGVwuIDnTNyb7y8c5ThyG5a9W3Dxa7lTS1S7LNepJDUPwlDxONMKHFQCA8a6+gsN+2gFrNzuQELW8LoO3+2FfOAIwJC3QBUy5Mmt+4ZbDMk1B/NOg==";
 //        validData[2] = "dOtwIqN4HRpOUUczo5hHVf4wvnXh353Awr2GIaSDmvwyfyCnrhsPhhHnU3azoV0fQxA+2T1IJYwVhawLOm+xIgAKf/X8M9hDPppgwOZnYx1MIOLC7/qqRyadts/RGdQ0iT+EQmBm2wCel+kUOsVsYUMBdM4+XI4glzk9zIEsq6RGuKbJ5TZPNxxSVOSZ85yWFHrlRt7f5rtjMePP9eLGLfYg/g0lwFiQgOczyXXIQ2dr+bB8ropLVT5dR0h6AnxgxpEXF1IqwUGF7ifSq5jCYQnvcKbBZsL+Q4tqtKq9VQtZX4GY8xml4lAp1GM+gNdcSJPWQqbkHsm22AKAipztUA==";
         context = InstrumentationRegistry.getInstrumentation().getContext();
@@ -58,7 +58,7 @@ public class VerificationTest {
         testSignature = getSignature();
         response = new PaymentResponse();
         response.setGrandTotal(2);
-        response.setBuyerId("37b20de1-5e1f-443f-b575-3ea79dc1b9f2");
+        response.setCustomerCode("7354");
         response.setMerchantOrderId("9e2bc816-0287-4301-9ebc-2f74dca78d8e");
         response.setMerchantId("02e1aaa5-ed29-408e-a24b-eddd665c3e8f");
         response.setMerchantCode("0325");

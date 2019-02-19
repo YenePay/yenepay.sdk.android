@@ -274,7 +274,7 @@ public class PaymentResponse implements Serializable {
     public String getVerificationString(){
         List<String> keyValues = new ArrayList<>();
         keyValues.add("TotalAmount=" + String.format(Locale.US, "%1$,.2f",this.grandTotal));
-        keyValues.add("BuyerId=" + getBuyerId());
+        keyValues.add("BuyerId=" + customerCode);
 //        keyValues.add("BuyerId=" + "7354");
         keyValues.add("MerchantOrderId=" + this.merchantOrderId);
 //        keyValues.add("MerchantId=" + this.merchantId);
