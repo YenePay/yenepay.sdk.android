@@ -3,6 +3,9 @@ package com.yenepaySDK;
 import android.text.TextUtils;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Sisay on 2/5/2017.
@@ -42,6 +45,10 @@ public class PaymentResponse implements Serializable {
     private String invoiceUrl;
     private int itemsCount;
     private String customerCode;
+    private String buyerId;
+    private String merchantId;
+    private double transactionFee;
+    private String signature;
 
     public String getCustomerEmail() {
         return customerEmail;
@@ -264,6 +271,54 @@ public class PaymentResponse implements Serializable {
         return !TextUtils.isEmpty(this.statusText) && this.status == DISPUTED;
     }
 
+    public String getVerificationString(){
+        List<String> keyValues = new ArrayList<>();
+        keyValues.add("TotalAmount=" + String.format(Locale.US, "%1$,.2f",this.grandTotal));
+        keyValues.add("BuyerId=" + getBuyerId());
+//        keyValues.add("BuyerId=" + "7354");
+        keyValues.add("MerchantOrderId=" + this.merchantOrderId);
+//        keyValues.add("MerchantId=" + this.merchantId);
+        keyValues.add("MerchantCode=" + this.merchantCode);
+        keyValues.add("TransactionCode=" + this.orderCode);
+        keyValues.add("TransactionId=" + this.paymentOrderId);
+        keyValues.add("Status=" + this.status);
+        keyValues.add("Currency=" + "ETB");
+
+        return TextUtils.join("&", keyValues);
+    }
+
+    public String getBuyerId() {
+        return buyerId;
+    }
+
+    public void setBuyerId(String buyerId) {
+        this.buyerId = buyerId;
+    }
+
+    public String getMerchantId() {
+        return merchantId;
+    }
+
+    public void setMerchantId(String merchantId) {
+        this.merchantId = merchantId;
+    }
+
+    public double getTransactionFee() {
+        return transactionFee;
+    }
+
+    public void setTransactionFee(double transactionFee) {
+        this.transactionFee = transactionFee;
+    }
+
+    public String getSignature() {
+        return signature;
+    }
+
+    public void setSignature(String signature) {
+        this.signature = signature;
+    }
+
     @Override
     public String toString() {
         return "PaymentResponse{" +
@@ -272,6 +327,8 @@ public class PaymentResponse implements Serializable {
                 ", orderCode='" + orderCode + '\'' +
                 ", customerName='" + customerName + '\'' +
                 ", merchantOrderId='" + merchantOrderId + '\'' +
+                ", merchantId='" + merchantId + '\'' +
+                ", buyerId='" + buyerId + '\'' +
                 ", merchantCode='" + merchantCode + '\'' +
                 ", status=" + status +
                 ", statusText='" + statusText + '\'' +

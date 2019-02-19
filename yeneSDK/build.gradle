@@ -27,5 +27,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'org.bouncycastle:bcprov-jdk15on:1.60'
+    androidTestImplementation 'com.google.guava:guava-collections:r03'
     testImplementation 'junit:junit:4.12'
 }

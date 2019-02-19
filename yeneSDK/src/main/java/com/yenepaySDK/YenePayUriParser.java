@@ -111,7 +111,7 @@ public class YenePayUriParser {
             parameters.put(YENEPAY_HANDLING_FEE, String.valueOf(order.getHandlingFee()));
         }
         if(order.getShippingFee() != null) {
-            parameters.put(YENEPAY_SHIPPING_FEE, String.valueOf(order.getDiscount()));
+            parameters.put(YENEPAY_SHIPPING_FEE, String.valueOf(order.getShippingFee()));
         }
 
         if(order.getProcess().equals(YENEPAY_PROCESS_EXPRESS) && order.getItems().size() == 1){
