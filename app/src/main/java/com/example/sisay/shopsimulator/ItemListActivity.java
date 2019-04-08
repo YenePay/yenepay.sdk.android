@@ -20,7 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
-import com.example.sisay.shopsimulator.dummy.DummyContent;
+import com.example.sisay.shopsimulator.store.StoreManager;
 
 import java.util.List;
 
@@ -32,7 +32,7 @@ import java.util.List;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class ItemListActivity extends AppCompatActivity {
+public class ItemListActivity extends ShopBaseActivity {
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -46,23 +46,24 @@ public class ItemListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_list);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
 
-        swipeRefreshContainer = (SwipeRefreshLayout)findViewById(R.id.swipe);
-        swipeRefreshContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-
-            }
-        });
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        swipeRefreshContainer = (SwipeRefreshLayout)findViewById(R.id.swipe);
+//        swipeRefreshContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//
+//            }
+//        });
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+                startActivity(new Intent(ItemListActivity.this, CartActivity.class));
             }
         });
 
@@ -80,7 +81,7 @@ public class ItemListActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(DummyContent.ITEMS));
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(StoreManager.ITEMS));
     }
 
     @Override
@@ -89,23 +90,31 @@ public class ItemListActivity extends AppCompatActivity {
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
             return true;
+        } else if(item.getItemId() == R.id.menu_up){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            return true;
+        } else if(item.getItemId() == R.id.menu_bars){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.global, menu);
-        return super.onPrepareOptionsMenu(menu);
+        return true;
     }
+
+
 
     public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final List<DummyContent.DummyItem> mValues;
+        private final List<StoreManager.DummyItem> mValues;
 
-        public SimpleItemRecyclerViewAdapter(List<DummyContent.DummyItem> items) {
+        public SimpleItemRecyclerViewAdapter(List<StoreManager.DummyItem> items) {
             mValues = items;
         }
 
@@ -118,10 +127,12 @@ public class ItemListActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mItem = mValues.get(position);
-            holder.mIdView.setText(mValues.get(position).content);
-            holder.mContentView.setText(mValues.get(position).details);
-            holder.mImageView.setImageResource(mValues.get(position).imageResId);
+            StoreManager.DummyItem item = mValues.get(position);
+            holder.mItem = item;
+            holder.mIdView.setText(item.content);
+            holder.mContentView.setText(item.details);
+            holder.mImageView.setImageResource(item.imageResId);
+            holder.mPriceView.setText(Utils.getAmountString(item.price));
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -155,14 +166,16 @@ public class ItemListActivity extends AppCompatActivity {
             public final TextView mIdView;
             public final TextView mContentView;
             public final ImageView mImageView;
-            public DummyContent.DummyItem mItem;
+            public final TextView mPriceView;
+            public StoreManager.DummyItem mItem;
 
             public ViewHolder(View view) {
                 super(view);
                 mView = view;
-                mIdView = (TextView) view.findViewById(R.id.content);
-                mContentView = (TextView) view.findViewById(R.id.detail);
-                mImageView = (ImageView) view.findViewById(R.id.imageView);
+                mIdView = view.findViewById(R.id.txt_item_name);
+                mContentView = view.findViewById(R.id.txt_quantity);
+                mImageView = view.findViewById(R.id.item_image);
+                mPriceView = view.findViewById(R.id.txt_price);
             }
 
             @Override

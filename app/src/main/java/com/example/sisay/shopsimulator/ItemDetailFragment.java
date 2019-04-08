@@ -1,10 +1,10 @@
 package com.example.sisay.shopsimulator;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
@@ -12,18 +12,17 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
-import com.example.sisay.shopsimulator.dummy.DummyContent;
-import com.yenepaySDK.Constants;
+import com.example.sisay.shopsimulator.store.StoreManager;
 import com.yenepaySDK.PaymentOrderManager;
 import com.yenepaySDK.PaymentResponse;
 import com.yenepaySDK.YenepayCheckOutIntentAction;
@@ -48,10 +47,10 @@ public class ItemDetailFragment extends Fragment {
     /**
      * The dummy content this fragment is presenting.
      */
-    private DummyContent.DummyItem mItem;
+    private StoreManager.DummyItem mItem;
     private EditText merchantCodeText;
-    private CollapsingToolbarLayout appBarLayout;
-    private static final String WEB_PAY_FORMAT = "https://checkout.yenepay.com/Home/Process/?ItemName=%s&ItemId=%s&UnitPrice=%.2f&Quantity=%d&Process=Express&SuccessUrl=&IPNUrl=&MerchantId=%s";
+    private ItemDetailActionListner mListner;
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -67,48 +66,15 @@ public class ItemDetailFragment extends Fragment {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
+            mItem = StoreManager.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
 
-            Activity activity = this.getActivity();
-            appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
-            if (appBarLayout != null) {
-                appBarLayout.setTitle(mItem.content);
-            }
+//            Activity activity = this.getActivity();
+//
+//
 
-            FloatingActionButton fab = (FloatingActionButton) activity.findViewById(R.id.fab);
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (mItem != null) {
-                        PaymentOrderManager paymentMgr = new PaymentOrderManager(
-                                getMerchantCode(),
-                                UUID.randomUUID().toString());
-                        //ComponentName info = new ComponentName("com.yenepay.mob.YenepayApp", "MainActivity");
-                        paymentMgr.addItem(new OrderedItem(mItem.id, mItem.content, 1, mItem.price));
-                        Intent yenePay = paymentMgr.generatePaymentArguments();
-                        yenePay.setAction(YenepayCheckOutIntentAction.YENEPAY_INTENT_FILTER_ACTION_CHECKOUT);
-                        yenePay.addCategory("android.intent.category.DEFAULT");
-                        yenePay.setType("*/*");
-                        ((ItemDetailActivity)getActivity()).checkOutItem(yenePay);
-//                        yenePay.setClassName("com.yenepay.mob.YenepayApp", "MainActivity");
-                        //startActivityForResult(yenePay, 99);
-
-                    } else {
-                        Snackbar.make(view, "Please select an Item before paying", Snackbar.LENGTH_LONG)
-                                .setAction("Action", null).show();
-                    }
-                }
-            });
         }
     }
-    private String getMerchantCode(){
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        return prefs.getString("example_text", null);
-        /*else if(merchantCodeText != null && !TextUtils.isEmpty(merchantCodeText.getText().toString())){
-            return merchantCodeText.getText().toString();
-        }*/
-        //return Constants.YENEPAY_MERCHANT_CODE;
-    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -118,21 +84,33 @@ public class ItemDetailFragment extends Fragment {
         paymentInfoContainer = (LinearLayout)rootView.findViewById(R.id.paymentInfoContainer);
         // Show the dummy content as text in a TextView.
         if (mItem != null) {
+            ((ImageView)rootView.findViewById(R.id.item_image)).setImageResource(mItem.imageResId);
             ((TextView) rootView.findViewById(R.id.item_content)).setText(mItem.content);
             ((TextView) rootView.findViewById(R.id.item_detail)).setText(mItem.details);
             ((TextView) rootView.findViewById(R.id.item_price)).setText(String.format(getString(R.string.money_amount_format), mItem.price));
             merchantCodeText = (EditText)rootView.findViewById(R.id.editMerchantCode);
-            appBarLayout.setExpandedTitleColor(ContextCompat.getColor(getActivity(), R.color.colorPrimaryDark));
-            appBarLayout.setBackground(ContextCompat.getDrawable(getActivity(), mItem.largeImageResId));
-            ((Button)rootView.findViewById(R.id.btnPayViaWeb)).setOnClickListener(new View.OnClickListener() {
+            rootView.findViewById(R.id.btnPayViaWeb).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String url = String.format(WEB_PAY_FORMAT, mItem.content, mItem.id, mItem.price, 1, getMerchantCode());
-//                    Uri uri = Uri.parse(URLDecoder.decode(successReturnUrl));
-                    Uri uri = Uri.parse(url);
-                    Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(uri);
-                    startActivity(intent);
+                    if(mListner != null){
+                        mListner.onItemWebCheckoutClicked(mItem);
+                    }
+                }
+            });
+            rootView.findViewById(R.id.btn_checkout).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(mListner != null){
+                        mListner.onItemCheckoutClicked(mItem);
+                    }
+                }
+            });
+            rootView.findViewById(R.id.btn_add_to_cart).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(mListner != null){
+                        mListner.onAddToCartClicked(mItem);
+                    }
                 }
             });
             populatePaymentInfo();
@@ -159,5 +137,27 @@ public class ItemDetailFragment extends Fragment {
             merchantCodeText.setText(PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("example_text", null));
 
         }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if(context instanceof ItemDetailActionListner){
+            mListner = (ItemDetailActionListner)context;
+        } else {
+            throw new IllegalArgumentException("Activity must implement ItemDetailActionListner");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListner = null;
+    }
+
+    public interface ItemDetailActionListner {
+        void onItemCheckoutClicked(StoreManager.DummyItem item);
+        void onItemWebCheckoutClicked(StoreManager.DummyItem item);
+        void onAddToCartClicked(StoreManager.DummyItem item);
     }
 }

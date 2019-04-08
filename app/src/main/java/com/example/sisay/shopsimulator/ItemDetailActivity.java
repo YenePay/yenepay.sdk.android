@@ -1,16 +1,29 @@
 package com.example.sisay.shopsimulator;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.sisay.shopsimulator.store.StoreManager;
 import com.yenepaySDK.PaymentOrderManager;
 import com.yenepaySDK.PaymentResponse;
+import com.yenepaySDK.YenePayUriParser;
+import com.yenepaySDK.YenepayCheckOutIntentAction;
+import com.yenepaySDK.model.OrderedItem;
+
+import java.util.UUID;
 
 
 /**
@@ -19,9 +32,11 @@ import com.yenepaySDK.PaymentResponse;
  * item details are presented side-by-side with a list of items
  * in a {@link ItemListActivity}.
  */
-public class ItemDetailActivity extends AppCompatActivity {
+public class ItemDetailActivity extends ShopBaseActivity implements
+        ItemDetailFragment.ItemDetailActionListner {
     private static final String TAG = "ItemDetailActivity";
     private static final String FRAGMENT_TAG = "ItemDetailFragment";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +52,14 @@ public class ItemDetailActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(ItemDetailActivity.this, CartActivity.class));
+                }
+            });
+
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity
         // (e.g. when rotating the screen from portrait to landscape).
@@ -50,6 +73,14 @@ public class ItemDetailActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             String itemId = getIntent().getStringExtra(ItemDetailFragment.ARG_ITEM_ID);
+            if(StoreManager.ITEM_MAP.containsKey(itemId)){
+                StoreManager.DummyItem item = StoreManager.ITEM_MAP.get(itemId);
+                actionBar.setTitle(item.content);
+                ImageView toolBarImage = findViewById(R.id.toolbar_image);
+                CollapsingToolbarLayout appBarLayout = findViewById(R.id.toolbar_layout);
+//                appBarLayout.setExpandedTitleColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
+                toolBarImage.setImageResource(item.largeImageResId);
+            }
             Bundle arguments = new Bundle();
             arguments.putString(ItemDetailFragment.ARG_ITEM_ID,
                     itemId);
@@ -77,37 +108,37 @@ public class ItemDetailActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+
+
+
+
+
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        String message = "onActivityResult Called, requestCode: " + requestCode + ", resultCode: " + resultCode + ", data: " + data;
-        if(resultCode == RESULT_OK) {
-            ItemDetailFragment fragment = (ItemDetailFragment)getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG);
-            PaymentResponse response = PaymentOrderManager.parseResponse(data.getExtras());
-            if(fragment != null && response != null){
-                fragment.setPaymentResponse(response);
-            }
-            Log.d(TAG, "onActivityResult: success response :" + response);
-            showMessage(message);
-        } else if(resultCode == RESULT_CANCELED && data != null){
-            showMessage(message);
+    public void onItemCheckoutClicked(StoreManager.DummyItem item) {
+        if (item != null) {
+
+            StoreManager.checkoutToApp(this, item);
+
         } else {
-            super.onActivityResult(requestCode, resultCode, data);
+            Snackbar.make(findViewById(R.id.detail_toolbar), "Please select an Item before paying", Snackbar.LENGTH_LONG).show();
         }
     }
 
-    private void showMessage(final String message){
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(ItemDetailActivity.this, message, Toast.LENGTH_LONG).show();
-            }
-        });
+    @Override
+    public void onItemWebCheckoutClicked(StoreManager.DummyItem item) {
+        StoreManager.checkoutWithBrowser(this, item);
     }
 
-    public void checkOutItem(Intent intent){
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(intent, 1);
-            //Log.d(TAG, "Activity Resolved: ");
-        }
+    @Override
+    public void onAddToCartClicked(StoreManager.DummyItem item) {
+        StoreManager.addToCart(item, 1);
+        Snackbar.make(findViewById(R.id.detail_toolbar), "Item added to your cart", Snackbar.LENGTH_LONG)
+                .setAction("View Cart", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        startActivity(new Intent(ItemDetailActivity.this, CartActivity.class));
+                    }
+                }).show();
     }
 }
