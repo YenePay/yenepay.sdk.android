@@ -1,4 +1,5 @@
 <resources>
-
     <string name="app_name">YenePaySDK</string>
+    <string name="certificate_host_name">www.yenepay.com</string>
+    <!--<string name="certificate_host_name">192.168.0.100</string>-->
 </resources>

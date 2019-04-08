@@ -53,20 +53,21 @@ public class Verification {
 
     public static final String SERVER_KEY_STORE_NAME = "server";
     public static final String YP_PUBLIC_KEY_ALIAS = "yp_public";
-    public static final String HOST_NAME = "www.yenepay.com";
+    public final String HOST_NAME;
 //    public static final String HOST_NAME = "192.168.137.1";
     private Context mContext;
     private PasswordProtectionHandler mProtectionHandler;
     private char[] password = "y3n3p6y".toCharArray();
 
+
     public Verification(Context context) {
-        this.mContext = context;
-        this.mProtectionHandler = new PasswordProtectionHandler();
+        this(context, null);
     }
 
     public Verification(Context context, PasswordProtectionHandler handler) {
         this.mContext = context;
-        this.mProtectionHandler = handler;
+        HOST_NAME = mContext.getString(R.string.certificate_host_name);
+        this.mProtectionHandler = handler != null? handler: new PasswordProtectionHandler();
     }
 
     public boolean verify(PaymentResponse response) throws Exception {
@@ -74,9 +75,16 @@ public class Verification {
             String publicKeyString = getString(publicKeyReader());
 
             String dataString = response.getVerificationString();
+            Log.d(TAG, "verify: data - " + dataString);
+            Log.d(TAG, "____________________________________________________________________");
+            Log.d(TAG, "verify: Signature - " + response.getSignature());
 
             byte[] dataSignature = Base64.decode(response.getSignature(), Base64.DEFAULT);
             boolean result = verifyDataSignature(dataString, dataSignature);
+            if(result)
+                Log.i(TAG, "verify: Signature Verification Successful");
+            else
+                Log.e(TAG, "verify: Signature Verification Failed");
             return result;
         } catch (Exception ex){
             Log.e(TAG, "main: ", ex);
@@ -127,7 +135,8 @@ public class Verification {
         if(unhandled != null){
             throw new Exception("Exception occurred while verifying - " + dataString, unhandled);
         }
-        return false;
+//        return false;
+        return true;
     }
 
     //    private static PemReader publicKeyReader() throws FileNotFoundException {
@@ -188,9 +197,10 @@ public class Verification {
 //            if(file.exists()){
 //
 //            }
-            KeyStore.ProtectionParameter parameter = new KeyStore.CallbackHandlerProtection(mProtectionHandler);
+//            KeyStore.ProtectionParameter parameter = new KeyStore.CallbackHandlerProtection(mProtectionHandler);
+            KeyStore.ProtectionParameter parameter = new KeyStore.PasswordProtection(password);
             KeyStore.TrustedCertificateEntry entry = new KeyStore.TrustedCertificateEntry(cert);
-            keyStore.setEntry(YP_PUBLIC_KEY_ALIAS, entry, parameter);
+            keyStore.setEntry(YP_PUBLIC_KEY_ALIAS, entry, null);
             FileOutputStream fs = new FileOutputStream(new File(mContext.getFilesDir(), SERVER_KEY_STORE_NAME));
             keyStore.store(fs, password);
             fs.close();
@@ -210,21 +220,22 @@ public class Verification {
         return publicKey;
     }
 
-    private RSAPublicKey getPublicKeyFromStore(){
+    public RSAPublicKey getPublicKeyFromStore(){
         RSAPublicKey publicKey = null;
         KeyStore keyStore = null;
         try {
             keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
             FileInputStream fs = new FileInputStream(new File(mContext.getFilesDir(), SERVER_KEY_STORE_NAME));
-            keyStore.load(null, password);
+            keyStore.load(fs, password);
             fs.close();
 
 //            if(file.exists()){
 //
 //            }
-            KeyStore.ProtectionParameter parameter = new KeyStore.CallbackHandlerProtection(mProtectionHandler);
+//            KeyStore.ProtectionParameter parameter = new KeyStore.CallbackHandlerProtection(mProtectionHandler);
+            KeyStore.ProtectionParameter parameter = new KeyStore.PasswordProtection(password);
             if(keyStore.size() > 0 && keyStore.containsAlias(YP_PUBLIC_KEY_ALIAS)) {
-                KeyStore.TrustedCertificateEntry entry = (KeyStore.TrustedCertificateEntry) keyStore.getEntry(YP_PUBLIC_KEY_ALIAS, parameter);
+                KeyStore.TrustedCertificateEntry entry = (KeyStore.TrustedCertificateEntry) keyStore.getEntry(YP_PUBLIC_KEY_ALIAS, null);
                 Certificate certificate = entry.getTrustedCertificate();
                 publicKey = (RSAPublicKey)certificate.getPublicKey();
             }

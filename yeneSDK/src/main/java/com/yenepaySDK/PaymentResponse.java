@@ -274,11 +274,11 @@ public class PaymentResponse implements Serializable {
     public String getVerificationString(){
         List<String> keyValues = new ArrayList<>();
         keyValues.add("TotalAmount=" + String.format(Locale.US, "%1$,.2f",this.grandTotal));
-        keyValues.add("BuyerId=" + customerCode);
+        keyValues.add("BuyerId=" + buyerId);
 //        keyValues.add("BuyerId=" + "7354");
         keyValues.add("MerchantOrderId=" + this.merchantOrderId);
-//        keyValues.add("MerchantId=" + this.merchantId);
         keyValues.add("MerchantCode=" + this.merchantCode);
+        keyValues.add("MerchantId=" + this.merchantId);
         keyValues.add("TransactionCode=" + this.orderCode);
         keyValues.add("TransactionId=" + this.paymentOrderId);
         keyValues.add("Status=" + this.status);
@@ -317,6 +317,46 @@ public class PaymentResponse implements Serializable {
 
     public void setSignature(String signature) {
         this.signature = signature;
+    }
+
+    public void setStatusFromText(String data){
+        status = UNKOWN;
+        switch (data.toLowerCase()){
+            case "paid":
+                status = PAID;
+                break;
+            case "completed":
+                status = COMPLETED;
+                break;
+            case "canceled":
+                status = CANCELED;
+                break;
+            case "delivered":
+                status = DELIVERED;
+                break;
+            case "disputed":
+                status = DISPUTED;
+                break;
+            case "error":
+                status = ERROR;
+                break;
+            case "expired":
+                status = EXPIERED;
+                break;
+            case "new":
+                status = NEW;
+                break;
+            case "waiting":
+                status = WAITING;
+                break;
+            case "verifying":
+                status = VERIFYING;
+                break;
+            case "processing":
+                status = PROCESSING;
+                break;
+        }
+        setStatusText(data);
     }
 
     @Override

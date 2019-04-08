@@ -47,24 +47,34 @@ public class VerificationTest {
     @Before
     public void setUp() throws Exception {
         validData[0] = testPublicKey;
-        validData[1] = "TotalAmount=2.00&BuyerId=7354&MerchantOrderId=9e2bc816-0287-4301-9ebc-2f74dca78d8e&MerchantCode=0325&TransactionCode=14493&TransactionId=c2dede26-ad53-43ee-9b27-a51b84c6b87a&Status=9&Currency=ETB";
-//        validData[1] = "TotalAmount=2";
-//        validData[1] = "TotalAmount=2.00&BuyerId=37b20de1-5e1f-443f-b575-3ea79dc1b9f2&MerchantOrderId=9e2bc816-0287-4301-9ebc-2f74dca78d8e&MerchantId=02e1aaa5-ed29-408e-a24b-eddd665c3e8f&MerchantCode=0325&TransactionCode=14493&TransactionId=c2dede26-ad53-43ee-9b27-a51b84c6b87a&Status=9&Currency=ETB";
-        validData[2] = "mP/EAk/GYjpcIozEvK2wqOkmTew5bUyty/18fU6ldG2PobsRTvo6uRvuwAHL32qZXqt6AIa0TrsHIh1wP9JqIy9sph3hdkC3Gu+vKFthDo4yTN5nYdi4dFYyhCDve8OOzLHbEaCyrxZl2cBPAS5xTpXmhj/39aZY9kY+0eC16lWPXmlI5yrS3R4kOzpMCzC2IjzhUc/wZ793/4Lk3TlcmY62bPVJWJ15pYU+HOEgYUzjcuRNsyEw3iNalHNkwChcNY+EX+47Eht3ELQDURm4K7xZdSP1IYpTyu4M54AymS8rGS8mu3sBh5IelM8I3AQ5KjKWkV0byyXA0ZE9febhyQ==";
-//        validData[2] = "m/5yILXByw88mYsbxv+lJzRVebfUdFcade1WdrseVRTcumLz2UQvCLSROQmazrA5RdTKlbKa3/B9viO+yw9E6p62lcHZCeFgaKTswzyi1+5DJr6bXRKwolXDvI4qNhaDGhdDLzoj7iujtYdEqSgaeUppcmq8SgfuMh4BytoLr6Yj1DOZgqvI+rkX61WiU/VAm24vpL2JsWO3w3pvuWyC19SQngq7jC9w4ex+HGGVwuIDnTNyb7y8c5ThyG5a9W3Dxa7lTS1S7LNepJDUPwlDxONMKHFQCA8a6+gsN+2gFrNzuQELW8LoO3+2FfOAIwJC3QBUy5Mmt+4ZbDMk1B/NOg==";
-//        validData[2] = "dOtwIqN4HRpOUUczo5hHVf4wvnXh353Awr2GIaSDmvwyfyCnrhsPhhHnU3azoV0fQxA+2T1IJYwVhawLOm+xIgAKf/X8M9hDPppgwOZnYx1MIOLC7/qqRyadts/RGdQ0iT+EQmBm2wCel+kUOsVsYUMBdM4+XI4glzk9zIEsq6RGuKbJ5TZPNxxSVOSZ85yWFHrlRt7f5rtjMePP9eLGLfYg/g0lwFiQgOczyXXIQ2dr+bB8ropLVT5dR0h6AnxgxpEXF1IqwUGF7ifSq5jCYQnvcKbBZsL+Q4tqtKq9VQtZX4GY8xml4lAp1GM+gNdcSJPWQqbkHsm22AKAipztUA==";
+//        validData[1] = "TotalAmount=2.00&BuyerId=0095&MerchantOrderId=3740417f-f2cf-4b47-bff9-70e76dbb1b61&MerchantCode=1913&TransactionCode=1318&TransactionId=29b31d09-e82c-4ca9-aaa4-e10e9853a23e&Status=9&Currency=ETB";
+//        validData[1] = "TotalAmount=2.00"+
+//                "&BuyerId=37ef11b0-1e8a-47a0-818c-196a81b74f22"+
+//                "&MerchantOrderId=0f8da454-5621-457c-854b-6547e39b81a9"+
+//                "&MerchantCode=0003"+
+//                "&MerchantId=f51f94fc-dd77-4366-90b8-8e0f88374573"+
+//                "&TransactionCode=1131"+
+//                "&TransactionId=a3bd3902-c7fd-4b5d-a30f-f896062c85d0"+
+//                "&Status=1&"+
+//                "Currency=ETB";
+        //        validData[2] = "pgehxWM+IaDMmG9y16IPjT1uedXRfufacxI9+AL5G4oUd4f+sOCdjbxFHZifptgIWhzF7CHFMcpiUCHG3Hmc3kmr2AuNKiJrLllB77ogVd/7toBavqOy5lTQ54hEcMZn+pWA8wRMdq0DwHcJ4VZJWGr5jTB2ee1Ovgo2+AhgBMbiOUrYOJKMAebLY0Bnjdzit384bujYc0wdi6VQy6PhJc+apXNLGD86uM5PUtluAmcVwHDJ2ZB94gGIzX86jAgPdn+lXdYqUEA8gsUmSYRjffy8jBS+jvx1g12HUp7lwJYhuvD/H5QoCYrHD/Oy0E+s7LKXVvnsl6RdoVKDBT1SPQ==";
+
+        validData[1] = "TotalAmount=2.00&BuyerId=93d72add-5c86-4779-a00a-9fa74a4d6b68&MerchantOrderId=f48c5a20-db87-4adf-b683-b931e11d4fe1&MerchantCode=1913&MerchantId=b14d41f4-d04e-4879-857a-058addbc680d&TransactionCode=1342&TransactionId=71e1e404-108a-4fbb-b06a-17f382804791&Status=9&Currency=ETB";
+        validData[2] = "aHz7QYabxRa1hodLv9yMKHsK2chTqyD7x0MaEpTImxw22eN90TpaDVDhkuL2FCbax5ahffLKAQCMH6HjwoERhTQeRiZaYU1gl3jUmLuvc6WpomRCQ8YFdTUFysHqdK8NW1NyJ8EQkPtHcWmP9LtoQ8E2Gw6A2emhv3nk/f0yp1WYyliN03IOiKAi3/Uq3AMnXS8wLhrwzMUf45zyj4Ze6kzI81y4pGAzIQo7vXdXSdMlLU4LH+s11Z7r8/R+rPfqRTHVTnuVYicGKneRoGwVFEyEbBLBhSsdojxH1g6EOTf2wlWjNSxW/rua6jCCLSNkv1TXDFNBgkES6DlSc1rCGg==";
+//
+// validData[2] = "dOtwIqN4HRpOUUczo5hHVf4wvnXh353Awr2GIaSDmvwyfyCnrhsPhhHnU3azoV0fQxA+2T1IJYwVhawLOm+xIgAKf/X8M9hDPppgwOZnYx1MIOLC7/qqRyadts/RGdQ0iT+EQmBm2wCel+kUOsVsYUMBdM4+XI4glzk9zIEsq6RGuKbJ5TZPNxxSVOSZ85yWFHrlRt7f5rtjMePP9eLGLfYg/g0lwFiQgOczyXXIQ2dr+bB8ropLVT5dR0h6AnxgxpEXF1IqwUGF7ifSq5jCYQnvcKbBZsL+Q4tqtKq9VQtZX4GY8xml4lAp1GM+gNdcSJPWQqbkHsm22AKAipztUA==";
         context = InstrumentationRegistry.getInstrumentation().getContext();
         testPublicKeyBytes = getTestPublicKey();
         testSignature = getSignature();
         response = new PaymentResponse();
         response.setGrandTotal(2);
-        response.setCustomerCode("7354");
-        response.setMerchantOrderId("9e2bc816-0287-4301-9ebc-2f74dca78d8e");
-        response.setMerchantId("02e1aaa5-ed29-408e-a24b-eddd665c3e8f");
-        response.setMerchantCode("0325");
-        response.setOrderCode("14493");
-        response.setPaymentOrderId("c2dede26-ad53-43ee-9b27-a51b84c6b87a");
-        response.setStatus(9);
+        response.setBuyerId("37ef11b0-1e8a-47a0-818c-196a81b74f22");
+        response.setMerchantOrderId("0f8da454-5621-457c-854b-6547e39b81a9");
+        response.setMerchantId("f51f94fc-dd77-4366-90b8-8e0f88374573");
+        response.setMerchantCode("0003");
+        response.setOrderCode("1131");
+        response.setPaymentOrderId("a3bd3902-c7fd-4b5d-a30f-f896062c85d0");
+        response.setStatus(1);
         response.setSignature(validData[2]);
         verification = new Verification(context);
     }

@@ -49,6 +49,12 @@ public class YenePayUriParser {
     private static final String YENEPAY_FAILURE_URL = "FailureUrl";
     private static final String YENEPAY_IPN_URL = "IpnUrl";
     private static final String YENEPAY_ITEMS_FORMAT = YENEPAY_ITEMS + "[%1$d].%2$s" ;
+    public static final String YENEPAY_BUYER_ID = "BuyerId";
+    public static final String YENEPAY_SIGNATURE = "Signature";
+    public static final String YENEPAY_STATUS = "Status";
+    public static final String YENEPAY_TRANSACTION_ID = "TransactionId";
+    public static final String YENEPAY_TRANSACTION_CODE = "TransactionCode";
+    public static final String YENEPAY_TOTAL_AMOUNT = "TotalAmount";
 
     private boolean isMultipleItem;
     private int itemsCount;
@@ -157,6 +163,22 @@ public class YenePayUriParser {
         }
         Log.d(TAG, "generateWebPaymentStringUri: " + result);
         return result;
+    }
+
+    public static PaymentResponse parsePaymentResponse(Uri uri){
+        PaymentResponse response = new PaymentResponse();
+        response.setBuyerId(uri.getQueryParameter(YENEPAY_BUYER_ID));
+        response.setSignature(uri.getQueryParameter(YENEPAY_SIGNATURE));
+        response.setMerchantId(uri.getQueryParameter(YENEPAY_MERCHANT_ID));
+        response.setMerchantOrderId(uri.getQueryParameter(YENEPAY_MERCHANT_ORDER_ID));
+        String statusQueryParam = uri.getQueryParameter(YENEPAY_STATUS);
+        if(!TextUtils.isEmpty(statusQueryParam)) {
+            response.setStatusFromText(statusQueryParam);
+        }
+        response.setPaymentOrderId(uri.getQueryParameter(YENEPAY_TRANSACTION_ID));
+        response.setOrderCode(uri.getQueryParameter(YENEPAY_TRANSACTION_CODE));
+        response.setGrandTotal(Double.parseDouble(uri.getQueryParameter(YENEPAY_TOTAL_AMOUNT)));
+        return response;
     }
 
 
