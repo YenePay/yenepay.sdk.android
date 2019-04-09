@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">YenePaySDK</string>
     <string name="certificate_host_name">www.yenepay.com</string>
+    <string name="default_payment_request_cancelled_msg">YenePay Checkout Request Canceled</string>
     <!--<string name="certificate_host_name">192.168.0.100</string>-->
 </resources>

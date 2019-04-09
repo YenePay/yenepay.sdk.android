@@ -43,7 +43,7 @@ public class PaymentOrderManager implements Serializable {
     private String ipnUrl;
     private Map<String, OrderedItem> items = new HashMap<String, OrderedItem>();
 
-
+    private PaymentOrderManager(){}
 
     public PaymentOrderManager(String merchantCode, String merchantOrderId) {
         this.merchantCode = merchantCode;
@@ -258,9 +258,5 @@ public class PaymentOrderManager implements Serializable {
 
     public static PaymentResponse parseResponse(Uri data){
         return YenePayUriParser.parsePaymentResponse(data);
-    }
-
-    public static void setGlobalPendingIntents(PendingIntent completeIntent, PendingIntent cancelIntent){
-
     }
 }
