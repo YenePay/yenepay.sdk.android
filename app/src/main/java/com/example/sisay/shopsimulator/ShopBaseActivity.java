@@ -8,9 +8,10 @@ import android.widget.Toast;
 
 import com.yenepaySDK.PaymentOrderManager;
 import com.yenepaySDK.PaymentResponse;
+import com.yenepaySDK.YenePayPaymentActivity;
 import com.yenepaySDK.handlers.PaymentHandlerActivity;
 
-public class ShopBaseActivity extends AppCompatActivity {
+public class ShopBaseActivity extends YenePayPaymentActivity {
     private static final String TAG = "ShopBaseActivity";
     public static final int CHECKOUT_REQ_CODE = 78;
 
@@ -25,28 +26,39 @@ public class ShopBaseActivity extends AppCompatActivity {
         });
     }
 
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        String message = "onActivityResult Called, requestCode: " + requestCode + ", resultCode: " + resultCode + ", data: " + data;
+//        if(requestCode == PaymentOrderManager.YENEPAY_CHECKOUT_REQ_CODE) {
+//            if (resultCode == RESULT_OK) {
+//
+//                final PaymentResponse response = PaymentOrderManager.parseResponse(data);
+//                mHandler.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        PaymentResponseFragment fragment = PaymentResponseFragment.getInstance(response);
+//                        fragment.show(getSupportFragmentManager(), "payment_response");
+//                    }
+//                }, 100);
+//
+//                Log.d(TAG, "onActivityResult: success response :" + response);
+////                showMessage(message);
+//            } else if (resultCode == RESULT_CANCELED && data != null) {
+//                showMessage("YenePay Checkout Request Canceled");
+//            }
+//        } else {
+//            super.onActivityResult(requestCode, resultCode, data);
+//        }
+//    }
+
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        String message = "onActivityResult Called, requestCode: " + requestCode + ", resultCode: " + resultCode + ", data: " + data;
-        if(requestCode == PaymentOrderManager.YENEPAY_CHECKOUT_REQ_CODE) {
-            if (resultCode == RESULT_OK) {
+    public void onPaymentResponseArrived(PaymentResponse response) {
+        PaymentResponseFragment fragment = PaymentResponseFragment.getInstance(response);
+        fragment.show(getSupportFragmentManager(), "payment_response");
+    }
 
-                final PaymentResponse response = PaymentOrderManager.parseResponse(data);
-                mHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        PaymentResponseFragment fragment = PaymentResponseFragment.getInstance(response);
-                        fragment.show(getSupportFragmentManager(), "payment_response");
-                    }
-                }, 100);
-
-                Log.d(TAG, "onActivityResult: success response :" + response);
-//                showMessage(message);
-            } else if (resultCode == RESULT_CANCELED && data != null) {
-                showMessage("YenePay Checkout Request Canceled");
-            }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
+    @Override
+    public void onPaymentResponseError(String error) {
+        showMessage(error);
     }
 }
