@@ -5,6 +5,7 @@ import android.util.Base64;
 import android.util.Log;
 
 import com.yenepaySDK.PaymentResponse;
+import com.yenepaySDK.mobsdk.BuildConfig;
 import com.yenepaySDK.mobsdk.R;
 
 import java.io.BufferedReader;
@@ -177,9 +178,11 @@ public class Verification {
         }};
 
         try {
-            SSLContext sc = SSLContext.getInstance("SSL");
-            sc.init(null, trustLocaleCert, new SecureRandom());
-            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+            if(BuildConfig.FLAVOR == "development") {
+                SSLContext sc = SSLContext.getInstance("SSL");
+                sc.init(null, trustLocaleCert, new SecureRandom());
+                HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+            }
 
             String hostName = HOST_NAME;
             SSLSocketFactory factory = HttpsURLConnection.getDefaultSSLSocketFactory();
