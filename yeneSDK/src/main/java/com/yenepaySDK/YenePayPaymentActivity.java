@@ -16,12 +16,13 @@ public class YenePayPaymentActivity extends AppCompatActivity {
     private final Handler mHandler = new Handler();
     private PaymentResponse mPaymentResponse;
     private String mPaymentErrorMessage;
-    private final String DEFAULT_CANCELED_MSG = getString(R.string.default_payment_request_cancelled_msg);
+    private String DEFAULT_CANCELED_MSG;
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        DEFAULT_CANCELED_MSG = getString(R.string.default_payment_request_cancelled_msg);
         if(savedInstanceState != null) {
             processIntent(savedInstanceState);
         } else if(getIntent() != null){

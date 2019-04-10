@@ -144,10 +144,16 @@ public class YenePayUriParser {
     }
 
     public static String generateWebPaymentStringUri(Payment order){
+        return generateWebPaymentStringUri(order, false);
+    }
+    public static String generateWebPaymentStringUri(Payment order, boolean useSandBox){
         StringBuilder url = new StringBuilder();
         Hashtable<String, String> parameters = YenePayUriParser.generateCheckOutParams(order);
         Set<String> keys = parameters.keySet();
-        url.append(Constants.CHECKOUT_SERVER_URL);
+        String serverUrl = useSandBox?
+                Constants.SANDBOX_CHECKOUT_SERVER_URL :
+                Constants.CHECKOUT_SERVER_URL;
+        url.append(serverUrl);
         url.append("Home/" + YENEPAY_CHECKOUT_PATH + "/?");
         List<String> keyValues = new ArrayList<String>();
         for (String key: keys){

@@ -1,7 +1,6 @@
 package com.yenepaySDK;
 
 import android.app.Activity;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -41,6 +40,7 @@ public class PaymentOrderManager implements Serializable {
     private double itemsTotal;
     private String returnUrl;
     private String ipnUrl;
+    private boolean useSandboxEnabled;
     private Map<String, OrderedItem> items = new HashMap<String, OrderedItem>();
 
     private PaymentOrderManager(){}
@@ -132,6 +132,14 @@ public class PaymentOrderManager implements Serializable {
         this.ipnUrl = ipnUrl;
     }
 
+    public boolean isUseSandboxEnabled() {
+        return useSandboxEnabled;
+    }
+
+    public void setUseSandboxEnabled(boolean useSandboxEnabled) {
+        this.useSandboxEnabled = useSandboxEnabled;
+    }
+
     public void addItem(OrderedItem item){
         if(TextUtils.isEmpty(item.getItemId())){
             item.setItemId(UUID.randomUUID().toString());
@@ -183,7 +191,7 @@ public class PaymentOrderManager implements Serializable {
 
     @NonNull
     public Intent getPaymentRequestIntent(Context context, Payment payment) {
-        String checkoutPath = YenePayUriParser.generateWebPaymentStringUri(payment);
+        String checkoutPath = YenePayUriParser.generateWebPaymentStringUri(payment, isUseSandboxEnabled());
         Uri url = Uri.parse(Uri.decode(checkoutPath));
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(url);
@@ -192,7 +200,7 @@ public class PaymentOrderManager implements Serializable {
 
     public void startCheckout(Context context){
         Intent intent = generatePaymentArguments();
-        if (intent.resolveActivity(context.getPackageManager()) != null) {
+        if (!isUseSandboxEnabled() && intent.resolveActivity(context.getPackageManager()) != null) {
             ((Activity)context).startActivityForResult(intent, YENEPAY_CHECKOUT_REQ_CODE);
             //Log.d(TAG, "Activity Resolved: ");
         } else {
