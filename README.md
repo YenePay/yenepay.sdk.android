@@ -69,6 +69,31 @@ public class MainActivity extends YenePayPaymentActivity {
 ```
 This all it takes to accept payment from your android app. 
 
+If you want your app to handle payment responses even after it has been closed. You need to configure globally pending intents for the response.
+
+One of a good places to put that logic can be in your Application class like this.
+
+```Java
+public class ShopApp extends Application {
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        PendingIntent completionIntent = PendingIntent.getActivity(getApplicationContext(),
+                PaymentOrderManager.YENEPAY_CHECKOUT_REQ_CODE,
+                new Intent(getApplicationContext(), PaymentResponseActivity.class), 0);
+        PendingIntent cancelationIntent = PendingIntent.getActivity(getApplicationContext(),
+                PaymentOrderManager.YENEPAY_CHECKOUT_REQ_CODE,
+                new Intent(getApplicationContext(), PaymentResponseActivity.class), 0);
+        YenePayConfiguration.setDefaultInstance(new YenePayConfiguration.Builder(getApplicationContext())
+        .setGlobalCompletionIntent(completionIntent)
+        .setGlobalCancelIntent(cancelationIntent)
+        .build());
+    }
+}
+
+```
+
 ## Issues
 If you encounter any issues please report them [here](https://github.com/YenePay/yenepay.sdk.android/issues) and we will try to provide a fix as soon as we can.
 
