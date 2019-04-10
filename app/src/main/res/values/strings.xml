@@ -17,6 +17,8 @@
     <string name="pref_title_merchant_code">YenePay Merchant Code</string>
     <string name="pref_default_merchant_code">0000</string>
 
+    <string name="pref_title_use_sandbox">Use sandbox for checkout</string>
+
     <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
     <string-array name="pref_example_list_titles">
         <item>Always</item>

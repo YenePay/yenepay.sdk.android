@@ -171,6 +171,7 @@ public class StoreManager {
                 UUID.randomUUID().toString());
         paymentMgr.setPaymentProcess(PaymentOrderManager.PROCESS_CART);
         paymentMgr.setReturnUrl(Utils.getReturnUrl());
+        paymentMgr.setUseSandboxEnabled(Utils.getUseSandboxEnabled(context));
         return paymentMgr;
     }
 

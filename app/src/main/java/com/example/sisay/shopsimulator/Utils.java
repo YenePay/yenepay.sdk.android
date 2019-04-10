@@ -23,4 +23,9 @@ public class Utils {
     public static String getReturnUrl(){
         return "com.yenepay.example.shopsimulator:/payment2redirect";
     }
+
+    public static boolean getUseSandboxEnabled(Context context){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getBoolean("pref_use_sandbox", true);
+    }
 }

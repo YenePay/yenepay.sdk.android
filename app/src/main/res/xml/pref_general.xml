@@ -13,5 +13,10 @@
         android:singleLine="true"
         android:title="@string/pref_title_merchant_code" />
 
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="pref_use_sandbox"
+        android:title="@string/pref_title_use_sandbox" />
+
 
 </PreferenceScreen>
