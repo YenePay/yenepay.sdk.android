@@ -178,7 +178,7 @@ public class Verification {
         }};
 
         try {
-            if(BuildConfig.FLAVOR == "development") {
+            if(BuildConfig.DEBUG) {
                 SSLContext sc = SSLContext.getInstance("SSL");
                 sc.init(null, trustLocaleCert, new SecureRandom());
                 HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
