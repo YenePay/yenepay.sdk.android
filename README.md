@@ -93,6 +93,10 @@ public class ShopApp extends Application {
 }
 
 ```
+**Note**
+If your app targets below Android API level 21 (LOLLIPOP) or if YenePay app is not installed on the user device, then configuring `YenePayConfiguration` with global PendingIntents like the above example is required to function return results properly.
+
+Please see the sample app in this repository for more on how to achieve that.
 
 ## Issues
 If you encounter any issues please report them [here](https://github.com/YenePay/yenepay.sdk.android/issues) and we will try to provide a fix as soon as we can.
