@@ -7,9 +7,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 
 import com.yenepaySDK.PaymentOrderManager;
 import com.yenepaySDK.PaymentResponse;
+import com.yenepaySDK.YenePayUriParser;
 import com.yenepaySDK.model.YenePayConfiguration;
 
 public class PaymentHandlerActivity extends AppCompatActivity {
@@ -20,6 +22,8 @@ public class PaymentHandlerActivity extends AppCompatActivity {
     public static final String KEY_PAYMENT_RESPONSE = "key_payment_response";
     public static final String KEY_ERROR_MESSAGE = "key_error_message";
     public static final String KEY_PAYMENT_STARTED = "key_payment_started";
+    public static final int PAYMENT_REQUEST_CODE = 131;
+    public static final String USER_TERMINATED_PAYMENT_FLOW = "User terminated payment flow";
 
     private PendingIntent mCompleteIntent;
     private PendingIntent mCancelIntent;
@@ -89,10 +93,15 @@ public class PaymentHandlerActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
         if(mPaymentRequestIntent != null){
-            startActivity(mPaymentRequestIntent);
+            if(mCompleteIntent != null) {
+                startActivity(mPaymentRequestIntent);
+                finish();
+            } else {
+                startActivityForResult(mPaymentRequestIntent, PAYMENT_REQUEST_CODE);
+            }
             mPaymentRequestIntent = null;
             mIsPaymentFlowStarted = true;
             return;
@@ -100,15 +109,47 @@ public class PaymentHandlerActivity extends AppCompatActivity {
 
 
         if (getIntent().getData() != null) {
-            handleAuthorizationComplete();
+            handlePaymentResponseComplete();
         } else {
-            handleAuthorizationCanceled();
+            handlePaymentCanceled();
         }
         finish();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
 
     }
 
-    private void handleAuthorizationComplete() {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if(requestCode == PAYMENT_REQUEST_CODE){
+            if(resultCode == RESULT_OK) {
+                setResult(RESULT_OK, extractResponseData(data));
+            } else if(data != null){
+                Intent cancelResponse = extractResponseData(data);
+                if(cancelResponse.hasExtra(KEY_PAYMENT_RESPONSE)){
+                    //Even if user cancels here if response data is returned we change the result to ok
+                    //so that user can handle the payment status appropriately
+                    setResult(RESULT_OK, cancelResponse);
+                } else {
+                    setResult(RESULT_CANCELED, cancelResponse);
+                }
+            } else {
+                //If no intent just return cancel
+                Intent cancelData = new Intent();
+                cancelData.putExtra(KEY_ERROR_MESSAGE, USER_TERMINATED_PAYMENT_FLOW);
+                setResult(RESULT_CANCELED, cancelData);
+            }
+            finish();
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    private void handlePaymentResponseComplete() {
         Uri responseUri = getIntent().getData();
         Intent responseData = extractResponseData(responseUri);
         if (responseData == null) {
@@ -153,7 +194,7 @@ public class PaymentHandlerActivity extends AppCompatActivity {
         return null;
     }
 
-    private void handleAuthorizationCanceled() {
+    private void handlePaymentCanceled() {
 //        Logger.debug("Authorization flow canceled by user");
         Intent cancelData = new Intent();
         cancelData.putExtra(KEY_ERROR_MESSAGE, "User terminated payment flow");
@@ -178,15 +219,41 @@ public class PaymentHandlerActivity extends AppCompatActivity {
             mPaymentRequestIntent = state.getParcelable(KEY_PAYMENT_INTENT);
         }
         mIsPaymentFlowStarted = state.getBoolean(KEY_PAYMENT_STARTED, false);
-        mCancelIntent = state.getParcelable(KEY_COMPLETE_INTENT);
+        mCompleteIntent = state.getParcelable(KEY_COMPLETE_INTENT);
         mCancelIntent = state.getParcelable(KEY_CANCEL_INTENT);
     }
 
     private Intent extractResponseData(Uri responseUri) {
-        PaymentResponse response = PaymentOrderManager.parseResponse(responseUri);
         Intent intent = new Intent();
-        intent.putExtra(KEY_PAYMENT_RESPONSE, response);
-        return intent;
+        if(responseUri != null) {
+            String errorMsg = responseUri.getQueryParameter(YenePayUriParser.YENEPAY_ERROR_MSG);
+            if(!TextUtils.isEmpty(errorMsg)){
+                intent.putExtra(KEY_ERROR_MESSAGE, errorMsg);
+            } else {
+                PaymentResponse response = PaymentOrderManager.parseResponse(responseUri);
+                if(response != null) {
+                    intent.putExtra(KEY_PAYMENT_RESPONSE, response);
+                }
+            }
+            return intent;
+        }
+        return null;
+    }
+
+    private Intent extractResponseData(Intent responseIntent) {
+        if(responseIntent != null && responseIntent.getExtras() != null && !responseIntent.getExtras().isEmpty()) {
+            Intent intent = new Intent();
+            if(responseIntent.hasExtra(KEY_ERROR_MESSAGE)){
+                intent.putExtra(KEY_ERROR_MESSAGE, responseIntent.getStringExtra(KEY_ERROR_MESSAGE));
+            } else {
+                PaymentResponse response = PaymentOrderManager.parseResponse(responseIntent.getExtras());
+                if (response != null) {
+                    intent.putExtra(KEY_PAYMENT_RESPONSE, response);
+                }
+            }
+            return intent;
+        }
+        return null;
     }
 
     @Override
@@ -196,6 +263,8 @@ public class PaymentHandlerActivity extends AppCompatActivity {
         outState.putParcelable(KEY_COMPLETE_INTENT, mCompleteIntent);
         outState.putParcelable(KEY_CANCEL_INTENT, mCancelIntent);
     }
+
+
 
 
 }

@@ -33,6 +33,15 @@ public class YenePayPaymentActivity extends AppCompatActivity {
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+        checkResponse();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    private void checkResponse() {
         if(hasPaymentResponse()){
             if(isPaymentResponseError()){
                 onPaymentResponseError(getPaymentErrorMessage());
@@ -66,7 +75,6 @@ public class YenePayPaymentActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        String message = "onActivityResult Called, requestCode: " + requestCode + ", resultCode: " + resultCode + ", data: " + data;
         if(requestCode == PaymentOrderManager.YENEPAY_CHECKOUT_REQ_CODE) {
             clearResponse();
             if (resultCode == RESULT_OK) {
@@ -79,14 +87,14 @@ public class YenePayPaymentActivity extends AppCompatActivity {
                         onPaymentResponseArrived(response);
                     }
                 }, 100);
-//                showMessage(message);
-            } else if (resultCode == RESULT_CANCELED && data != null) {
-//                showMessage("YenePay Checkout Request Canceled");
+            } else if (resultCode == RESULT_CANCELED) {
+                final String error = data != null && data.hasExtra(PaymentHandlerActivity.KEY_ERROR_MESSAGE)?
+                        data.getStringExtra(PaymentHandlerActivity.KEY_ERROR_MESSAGE):
+                        DEFAULT_CANCELED_MSG;
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-
-                        onPaymentResponseError(DEFAULT_CANCELED_MSG);
+                        onPaymentResponseError(error);
                     }
                 }, 100);
             }

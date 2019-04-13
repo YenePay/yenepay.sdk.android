@@ -4,13 +4,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.yenepaySDK.handlers.PaymentHandlerActivity;
 import com.yenepaySDK.model.OrderedItem;
 import com.yenepaySDK.model.Payment;
+import com.yenepaySDK.model.YenePayConfiguration;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -24,7 +27,7 @@ import java.util.UUID;
  */
 
 public class PaymentOrderManager implements Serializable {
-
+    private static final String TAG = "PaymentOrderManager";
     public static final String PROCESS_CART = "Cart";
     public static final String PROCESS_EXPRESS = "Express";
     public static final int YENEPAY_CHECKOUT_REQ_CODE = 199;
@@ -163,7 +166,7 @@ public class PaymentOrderManager implements Serializable {
     }
 
     public Intent generatePaymentArguments(){
-        Intent args = new Intent();
+        Intent args = new Intent(YenepayCheckOutIntentAction.YENEPAY_INTENT_FILTER_ACTION_CHECKOUT);
         args.putExtra(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_MERCHANT_ID, this.merchantCode);
         args.putExtra(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_MERCHANT_ORDER_ID, this.merchantOrderId);
         args.putExtra(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_PROCESS, this.paymentProcess);
@@ -176,17 +179,13 @@ public class PaymentOrderManager implements Serializable {
         args.putExtra(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_HANDLING_FEE, this.handlingFee);
         args.putExtra(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_SHIPPING_FEE, this.shippingFee);
         args.putExtra(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_ITEMS, new ArrayList<OrderedItem>(getItems()));
-
-        args.setAction(YenepayCheckOutIntentAction.YENEPAY_INTENT_FILTER_ACTION_CHECKOUT);
-        args.addCategory("android.intent.category.DEFAULT");
-        args.setType("*/*");
         return args;
     }
 
     public void openPaymentBrowser(Context context){
         Payment payment = generatePayment();
         Intent intent = getPaymentRequestIntent(context, payment);
-        ((Activity)context).startActivityForResult(intent, YENEPAY_CHECKOUT_REQ_CODE);
+        ((Activity)context).startActivityForResult(intent, PaymentOrderManager.YENEPAY_CHECKOUT_REQ_CODE);
     }
 
     @NonNull
@@ -201,10 +200,20 @@ public class PaymentOrderManager implements Serializable {
     public void startCheckout(Context context){
         Intent intent = generatePaymentArguments();
         if (!isUseSandboxEnabled() && intent.resolveActivity(context.getPackageManager()) != null) {
-            ((Activity)context).startActivityForResult(intent, YENEPAY_CHECKOUT_REQ_CODE);
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                ((Activity) context).startActivityForResult(
+                        PaymentHandlerActivity.createStartForResultIntent(context, intent),
+                        PaymentOrderManager.YENEPAY_CHECKOUT_REQ_CODE);
+            } else {
+                YenePayConfiguration configuration = YenePayConfiguration.getDefaultInstance();
+                Intent startIntent = PaymentHandlerActivity.createStartIntent(context, intent,
+                        configuration.getGlobalCompletionIntent(),
+                        configuration.getGlobalCancelIntent());
+                ((Activity) context).startActivity(startIntent);
+            }
             //Log.d(TAG, "Activity Resolved: ");
         } else {
-            openPaymentBrowser((Activity)context);
+            openPaymentBrowser(context);
         }
     }
 
@@ -242,24 +251,28 @@ public class PaymentOrderManager implements Serializable {
         PaymentResponse response = null;
         if(args != null && args.containsKey(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_ORDER_ID)){
             response = new PaymentResponse();
-            response.setPaymentOrderId(args.getString(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_ORDER_ID));
-            response.setCustomerCode(args.getString(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_CUSTOMER_CODE, ""));
-            response.setCustomerEmail(args.getString(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_CUSTOMER_EMAIL, ""));
-            response.setCustomerName(args.getString(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_CUSTOMER_NAME, ""));
-            response.setInvoiceId(args.getString(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_INVOICE_ID,""));
-            response.setMerchantCode(args.getString(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_MERCHANT_ID));
-            response.setMerchantOrderId(args.getString(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_MERCHANT_ORDER_ID));
-            response.setStatusText(args.getString(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_STATUS_TEXT));
-            response.setStatus(args.getInt(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_STATUS, -1));
-            //response.setItemsCount(args.getInt(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_ITEMS, -1));
-            response.setDiscount(args.getDouble(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_DISCOUNT, 0));
-            response.setGrandTotal(args.getDouble(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_ORDER_TOTAL, 0));
-            response.setHandlingFee(args.getDouble(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_HANDLING_FEE, 0));
-            response.setItemsTotal(args.getDouble(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_ITEMS_TOTAL, 0));
-            response.setShippingFee(args.getDouble(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_SHIPPING_FEE, 0));
-            response.setTax1(args.getDouble(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_TAX_1, 0));
-            response.setTax2(args.getDouble(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_TAX_2, 0));
-            response.setMerchantCommisionFee(args.getDouble(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_COMMISION_FEE, 0));
+            try {
+                response.setPaymentOrderId(args.getString(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_ORDER_ID));
+                response.setCustomerCode(args.getString(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_CUSTOMER_CODE, ""));
+                response.setCustomerEmail(args.getString(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_CUSTOMER_EMAIL, ""));
+                response.setCustomerName(args.getString(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_CUSTOMER_NAME, ""));
+                response.setInvoiceId(args.getString(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_INVOICE_ID, ""));
+                response.setMerchantCode(args.getString(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_MERCHANT_ID));
+                response.setMerchantOrderId(args.getString(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_MERCHANT_ORDER_ID));
+                response.setStatusText(args.getString(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_STATUS_TEXT));
+                response.setStatus(args.getInt(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_STATUS, -1));
+                //response.setItemsCount(args.getInt(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_ITEMS, -1));
+                response.setDiscount(args.getDouble(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_DISCOUNT, 0));
+                response.setGrandTotal(args.getDouble(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_ORDER_TOTAL, 0));
+                response.setHandlingFee(args.getDouble(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_HANDLING_FEE, 0));
+                response.setItemsTotal(args.getDouble(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_ITEMS_TOTAL, 0));
+                response.setShippingFee(args.getDouble(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_SHIPPING_FEE, 0));
+                response.setTax1(args.getDouble(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_TAX_1, 0));
+                response.setTax2(args.getDouble(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_TAX_2, 0));
+                response.setMerchantCommisionFee(args.getDouble(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_COMMISION_FEE, 0));
+            } catch (Exception e){
+                Log.d(TAG, "Error occuered wile parsing payment response: ", e);
+            }
         }
         return response;
     }

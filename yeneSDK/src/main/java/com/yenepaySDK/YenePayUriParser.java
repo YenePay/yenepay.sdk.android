@@ -29,32 +29,33 @@ public class YenePayUriParser {
     private static final String TAG = "YenePayUriParser";
     private static final String YENEPAY_DOMAIN = "yenepay.com";
     private static final String YENEPAY_CHECKOUT_PATH = "Process";
-    private static final String YENEPAY_MERCHANT_ID = "MerchantId";
-    private static final String YENEPAY_MERCHANT_ORDER_ID = "MerchantOrderId";
-    private static final String YENEPAY_PROCESS = "Process";
-    private static final String YENEPAY_PROCESS_CART = "Cart";
-    private static final String YENEPAY_PROCESS_EXPRESS = "Express";
-    private static final String YENEPAY_ITEM_ID = "ItemId";
-    private static final String YENEPAY_ITEM_NAME = "ItemName";
-    private static final String YENEPAY_UNIT_PRICE = "UnitPrice";
-    private static final String YENEPAY_QUANTITY = "Quantity";
-    private static final String YENEPAY_TAX_1 = "Tax1";
-    private static final String YENEPAY_TAX_2 = "Tax2";
-    private static final String YENEPAY_ITEMS = "Items";
-    private static final String YENEPAY_DISCOUNT = "Discount";
-    private static final String YENEPAY_HANDLING_FEE = "HandlingFee";
-    private static final String YENEPAY_SHIPPING_FEE = "ShippingFee";
-    private static final String YENEPAY_CANCEL_URL = "CancelUrl";
-    private static final String YENEPAY_SUCCESS_URL = "SuccessUrl";
-    private static final String YENEPAY_FAILURE_URL = "FailureUrl";
-    private static final String YENEPAY_IPN_URL = "IpnUrl";
-    private static final String YENEPAY_ITEMS_FORMAT = YENEPAY_ITEMS + "[%1$d].%2$s" ;
+    public static final String YENEPAY_MERCHANT_ID = "MerchantId";
+    public static final String YENEPAY_MERCHANT_ORDER_ID = "MerchantOrderId";
+    public static final String YENEPAY_PROCESS = "Process";
+    public static final String YENEPAY_PROCESS_CART = "Cart";
+    public static final String YENEPAY_PROCESS_EXPRESS = "Express";
+    public static final String YENEPAY_ITEM_ID = "ItemId";
+    public static final String YENEPAY_ITEM_NAME = "ItemName";
+    public static final String YENEPAY_UNIT_PRICE = "UnitPrice";
+    public static final String YENEPAY_QUANTITY = "Quantity";
+    public static final String YENEPAY_TAX_1 = "Tax1";
+    public static final String YENEPAY_TAX_2 = "Tax2";
+    public static final String YENEPAY_ITEMS = "Items";
+    public static final String YENEPAY_DISCOUNT = "Discount";
+    public static final String YENEPAY_HANDLING_FEE = "HandlingFee";
+    public static final String YENEPAY_SHIPPING_FEE = "ShippingFee";
+    public static final String YENEPAY_CANCEL_URL = "CancelUrl";
+    public static final String YENEPAY_SUCCESS_URL = "SuccessUrl";
+    public static final String YENEPAY_FAILURE_URL = "FailureUrl";
+    public static final String YENEPAY_IPN_URL = "IpnUrl";
+    public static final String YENEPAY_ITEMS_FORMAT = YENEPAY_ITEMS + "[%1$d].%2$s" ;
     public static final String YENEPAY_BUYER_ID = "BuyerId";
     public static final String YENEPAY_SIGNATURE = "Signature";
     public static final String YENEPAY_STATUS = "Status";
     public static final String YENEPAY_TRANSACTION_ID = "TransactionId";
     public static final String YENEPAY_TRANSACTION_CODE = "TransactionCode";
     public static final String YENEPAY_TOTAL_AMOUNT = "TotalAmount";
+    public static final String YENEPAY_ERROR_MSG = "ErrorMsg";
 
     private boolean isMultipleItem;
     private int itemsCount;
@@ -183,7 +184,11 @@ public class YenePayUriParser {
         }
         response.setPaymentOrderId(uri.getQueryParameter(YENEPAY_TRANSACTION_ID));
         response.setOrderCode(uri.getQueryParameter(YENEPAY_TRANSACTION_CODE));
-        response.setGrandTotal(Double.parseDouble(uri.getQueryParameter(YENEPAY_TOTAL_AMOUNT)));
+        String amt = uri.getQueryParameter(YENEPAY_TOTAL_AMOUNT);
+        if(!TextUtils.isEmpty(amt)) {
+            amt = amt.replace(",", "");
+            response.setGrandTotal(Double.parseDouble(amt));
+        }
         return response;
     }
 

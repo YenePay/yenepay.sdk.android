@@ -320,6 +320,11 @@ public class PaymentResponse implements Serializable {
     }
 
     public void setStatusFromText(String data){
+        if(TextUtils.isDigitsOnly(data)){
+            setStatus(Integer.parseInt(data));
+            setStatusTextFromInt(status);
+            return;
+        }
         status = UNKOWN;
         switch (data.toLowerCase()){
             case "paid":
@@ -356,7 +361,34 @@ public class PaymentResponse implements Serializable {
                 status = PROCESSING;
                 break;
         }
-        setStatusText(data);
+        setStatusTextFromInt(status);
+    }
+
+    private void setStatusTextFromInt(int status){
+        String genStatusText = "Unknown";
+        switch(this.status){
+            case COMPLETED:
+            case PAID:
+            case DELIVERED:
+                genStatusText = "Completed";
+                break;
+            case NEW:
+            case WAITING:
+            case PROCESSING:
+                genStatusText = "Pending";
+                break;
+            case VERIFYING:
+                genStatusText = "Processing";
+                break;
+            case CANCELED:
+                genStatusText = "Canceled";
+                break;
+            case EXPIERED:
+                genStatusText = "Expired";
+                break;
+
+        }
+        setStatusText(genStatusText);
     }
 
     @Override
