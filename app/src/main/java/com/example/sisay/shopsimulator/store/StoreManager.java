@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
 
 import com.example.sisay.shopsimulator.CartActivity;
 import com.example.sisay.shopsimulator.R;
@@ -12,6 +14,7 @@ import com.example.sisay.shopsimulator.ShopBaseActivity;
 import com.example.sisay.shopsimulator.Utils;
 import com.yenepaySDK.PaymentOrderManager;
 import com.yenepaySDK.YenepayCheckOutIntentAction;
+import com.yenepaySDK.errors.InvalidPaymentException;
 import com.yenepaySDK.model.OrderedItem;
 
 import java.util.ArrayList;
@@ -27,7 +30,7 @@ import java.util.UUID;
  * TODO: Replace all uses of this class before publishing your app.
  */
 public class StoreManager {
-
+    private static final String TAG = "StoreManager";
     /**
      * An array of sample (dummy) items.
      */
@@ -136,7 +139,11 @@ public class StoreManager {
 //        intent.setData(uri);
 //        context.startActivity(intent);
         PaymentOrderManager paymentMgr = generatePaymentOrderManager(context);
-        paymentMgr.addItems(ORDERS);
+        try {
+            paymentMgr.addItems(ORDERS);
+        } catch (InvalidPaymentException e) {
+            e.printStackTrace();
+        }
         paymentMgr.openPaymentBrowser(context);
     }
 
@@ -149,19 +156,41 @@ public class StoreManager {
 //        context.startActivity(intent);
 
         PaymentOrderManager paymentMgr = generatePaymentOrderManager(context);
-        paymentMgr.addItem(item.convertToOrderedItem(1));
-        paymentMgr.openPaymentBrowser(context);
+        try {
+            paymentMgr.addItem(item.convertToOrderedItem(1));
+            paymentMgr.openPaymentBrowser(context);
+        } catch (InvalidPaymentException e) {
+            Log.e(TAG, "checkoutWithBrowser: ", e);
+            showErrorDialog(context, e.getMessage());
+        }
+
     }
     public static void checkoutToApp(Context context){
         PaymentOrderManager paymentMgr = generatePaymentOrderManager(context);
-        paymentMgr.addItems(ORDERS);
-        paymentMgr.startCheckout(context);
+        try {
+            paymentMgr.addItems(ORDERS);
+            paymentMgr.startCheckout(context);
+        } catch (InvalidPaymentException e) {
+            e.printStackTrace();
+            showErrorDialog(context, e.getMessage());
+        }
     }
 
     public static void checkoutToApp(Context context, DummyItem item){
         PaymentOrderManager paymentMgr = generatePaymentOrderManager(context);
-        paymentMgr.addItem(item.convertToOrderedItem(1));
-        paymentMgr.startCheckout(context);
+        try {
+            paymentMgr.addItem(item.convertToOrderedItem(1));
+            paymentMgr.startCheckout(context);
+        } catch (InvalidPaymentException e) {
+            e.printStackTrace();
+            showErrorDialog(context, e.getMessage());
+        }
+    }
+
+    private static void showErrorDialog(Context context,String message){
+        AlertDialog dialog = new AlertDialog.Builder(context)
+                .setMessage(message)
+                .show();
     }
 
     @NonNull
