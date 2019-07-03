@@ -9,7 +9,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.yenepaySDK.errors.InvalidPaymentException;
 import com.yenepaySDK.handlers.PaymentHandlerActivity;
 import com.yenepaySDK.model.OrderedItem;
 import com.yenepaySDK.model.Payment;
@@ -32,6 +34,7 @@ public class PaymentOrderManager implements Serializable {
     public static final String PROCESS_EXPRESS = "Express";
     public static final int YENEPAY_CHECKOUT_REQ_CODE = 199;
 
+
     private String merchantCode;
     private String merchantOrderId;
     private String paymentProcess = PROCESS_EXPRESS;
@@ -44,11 +47,15 @@ public class PaymentOrderManager implements Serializable {
     private String returnUrl;
     private String ipnUrl;
     private boolean useSandboxEnabled;
+    private boolean shoppingCartMode = true;
     private Map<String, OrderedItem> items = new HashMap<String, OrderedItem>();
 
-    private PaymentOrderManager(){}
+    private PaymentOrderManager(){
+        shoppingCartMode = true;
+    }
 
     public PaymentOrderManager(String merchantCode, String merchantOrderId) {
+        this();
         this.merchantCode = merchantCode;
         this.merchantOrderId = merchantOrderId;
     }
@@ -143,19 +150,27 @@ public class PaymentOrderManager implements Serializable {
         this.useSandboxEnabled = useSandboxEnabled;
     }
 
-    public void addItem(OrderedItem item){
-        if(TextUtils.isEmpty(item.getItemId())){
-            item.setItemId(UUID.randomUUID().toString());
+    public void addItem(OrderedItem item) throws InvalidPaymentException {
+        PaymentValidationResult validationResult = validateOrderedItem(item);
+        if(!validationResult.isValid){
+            throw new InvalidPaymentException(validationResult.toString());
         }
-        if(items.containsKey(item.getItemId())){
-            items.get(item.getItemId()).setQuantity(items.get(item.getItemId()).getQuantity() + item.getQuantity());
+        if(shoppingCartMode) {
+            if (TextUtils.isEmpty(item.getItemId())) {
+                item.setItemId(UUID.randomUUID().toString());
+            }
+            if (items.containsKey(item.getItemId())) {
+                items.get(item.getItemId()).setQuantity(items.get(item.getItemId()).getQuantity() + item.getQuantity());
+            } else {
+                items.put(item.getItemId(), item);
+            }
         } else {
-            items.put(item.getItemId(), item);
+            items.put(UUID.randomUUID().toString(), item);
         }
         itemsTotal += item.getItemTotalPrice();
     }
 
-    public void addItems(List<OrderedItem> items){
+    public void addItems(List<OrderedItem> items) throws InvalidPaymentException {
         for(OrderedItem item: items){
             addItem(item);
         }
@@ -185,7 +200,7 @@ public class PaymentOrderManager implements Serializable {
     public void openPaymentBrowser(Context context){
         Payment payment = generatePayment();
         Intent intent = getPaymentRequestIntent(context, payment);
-        ((Activity)context).startActivityForResult(intent, PaymentOrderManager.YENEPAY_CHECKOUT_REQ_CODE);
+        ((Activity)context).startActivity(intent/*, PaymentOrderManager.YENEPAY_CHECKOUT_REQ_CODE*/);
     }
 
     @NonNull
@@ -197,7 +212,11 @@ public class PaymentOrderManager implements Serializable {
         return PaymentHandlerActivity.createStartForResultIntent(context, intent);
     }
 
-    public void startCheckout(Context context){
+    public void startCheckout(Context context) throws InvalidPaymentException {
+        PaymentValidationResult validationResult = validate();
+        if(!validationResult.isValid){
+            throw new InvalidPaymentException(validationResult.toString());
+        }
         Intent intent = generatePaymentArguments();
         if (!isUseSandboxEnabled() && intent.resolveActivity(context.getPackageManager()) != null) {
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -217,6 +236,86 @@ public class PaymentOrderManager implements Serializable {
         }
     }
 
+    public PaymentValidationResult validate(){
+        List<String> errors = new ArrayList<>();
+
+        if(TextUtils.isEmpty(merchantCode)){
+            errors.add("Invalid/Empty merchant code");
+        }
+
+        if(TextUtils.isEmpty(paymentProcess)){
+            errors.add("Empty Payment process");
+        }
+
+        if(!TextUtils.equals(paymentProcess, PROCESS_CART) && !TextUtils.equals(paymentProcess, PROCESS_EXPRESS)){
+            errors.add(String.format("Invalid Payment process only ( %s or %s)", PROCESS_CART, PROCESS_EXPRESS));
+        }
+
+        if(tax1 < 0){
+            errors.add("Invalid tax1 value, must be 0 or positive");
+        }
+
+        if(tax2 < 0){
+            errors.add("Invalid tax2 value, must be 0 or positive");
+        }
+
+        if(handlingFee < 0){
+            errors.add("Invalid handlingFee value, must be 0 or positive");
+        }
+
+        if(shippingFee < 0){
+            errors.add("Invalid shippingFee value, must be 0 or positive");
+        }
+        if(discount < 0){
+            errors.add("Invalid shippingFee value, must be 0 or positive");
+        }
+
+        if(TextUtils.isEmpty(returnUrl)){
+            errors.add("Empty returnUrl value");
+        }
+
+        if(items.isEmpty()){
+            errors.add("Empty items, add at least one item");
+        }
+
+        for (OrderedItem item: items.values()){
+            PaymentValidationResult result = validateOrderedItem(item);
+            if(!result.isValid){
+                errors.addAll(result.errors);
+            }
+        }
+        PaymentValidationResult validationResult = new PaymentValidationResult();
+        validationResult.isValid = errors.isEmpty();
+        validationResult.errors = errors;
+        return validationResult;
+    }
+
+    public PaymentValidationResult validateOrderedItem(OrderedItem item) {
+        List<String> itemErrors = new ArrayList<>();
+        if(item == null){
+            itemErrors.add("Item can not be null");
+        } else {
+            if(TextUtils.isEmpty(item.getItemName())){
+                itemErrors.add("Item Name can not be empty");
+            } /*else if(item.getItemName().length() > 350){
+                itemErrors.add("Item Name can not exceed 350 characters");
+            }*/
+
+            if(item.getUnitPrice() <= 0){
+                itemErrors.add("Item Unit Price must be greater than zero");
+            }
+
+            if(item.getQuantity() < 1){
+                itemErrors.add("Item Quantity must be greater than or equal to 1");
+            }
+        }
+
+        PaymentValidationResult result = new PaymentValidationResult();
+        result.isValid = itemErrors.isEmpty();
+        result.errors = itemErrors;
+        return result;
+    }
+
     @NonNull
     public Payment generatePayment() {
         Payment payment = new Payment();
@@ -229,10 +328,6 @@ public class PaymentOrderManager implements Serializable {
         payment.setIpnUrl(getIpnUrl());
         payment.setItems(getItems());
         return payment;
-    }
-
-    public void performPayment(){
-
     }
 
     public static PaymentResponse parseResponse(Intent intent){
@@ -279,5 +374,36 @@ public class PaymentOrderManager implements Serializable {
 
     public static PaymentResponse parseResponse(Uri data){
         return YenePayUriParser.parsePaymentResponse(data);
+    }
+
+    public boolean isShoppingCartMode() {
+        return shoppingCartMode;
+    }
+
+    public void setShoppingCartMode(boolean shoppingCartMode) {
+        this.shoppingCartMode = shoppingCartMode;
+    }
+
+    public static class PaymentValidationResult {
+        public PaymentValidationResult() {
+            isValid = false;
+            errors = new ArrayList<>();
+        }
+
+        public boolean isValid;
+        public List<String> errors;
+
+        public void showResultToast(Context context){
+            Toast.makeText(context, toString(), Toast.LENGTH_LONG);
+        }
+
+        @Override
+        public String toString(){
+            if(errors != null && !errors.isEmpty()){
+                String joined = TextUtils.join("\n", errors);
+                return "PaymentValidationErrors: \n" + joined;
+            }
+            return null;
+        }
     }
 }

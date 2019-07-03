@@ -12,6 +12,10 @@ android {
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
+//        manifestPlaceholders = [
+//                yenepayReturnScheme: "com.yenepay.result"
+//        ]
+
     }
     buildTypes {
         release {
