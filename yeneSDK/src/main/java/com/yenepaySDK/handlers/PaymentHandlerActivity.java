@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import com.yenepaySDK.PaymentOrderManager;
 import com.yenepaySDK.PaymentResponse;
 import com.yenepaySDK.YenePayUriParser;
+import com.yenepaySDK.YenepayCheckOutIntentAction;
 import com.yenepaySDK.model.YenePayConfiguration;
 
 public class PaymentHandlerActivity extends AppCompatActivity {
@@ -96,7 +97,8 @@ public class PaymentHandlerActivity extends AppCompatActivity {
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         if(mPaymentRequestIntent != null){
-            if(mCompleteIntent != null) {
+            if(mCompleteIntent != null || !TextUtils.equals(mPaymentRequestIntent.getAction(),
+                    YenepayCheckOutIntentAction.YENEPAY_INTENT_FILTER_ACTION_CHECKOUT)) {
                 startActivity(mPaymentRequestIntent);
                 finish();
             } else {

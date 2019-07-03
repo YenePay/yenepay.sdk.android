@@ -6,13 +6,15 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.yenepaySDK.errors.InvalidPaymentException;
 import com.yenepaySDK.handlers.PaymentHandlerActivity;
 import com.yenepaySDK.mobsdk.R;
 
 public class YenePayPaymentActivity extends AppCompatActivity {
-
+    private static final String TAG = "YenePayPaymentActivity";
     private final Handler mHandler = new Handler();
     private PaymentResponse mPaymentResponse;
     private String mPaymentErrorMessage;
@@ -108,7 +110,11 @@ public class YenePayPaymentActivity extends AppCompatActivity {
             throw new IllegalArgumentException("PaymentOrderManager can not be null");
         }
 
-        orderManager.startCheckout(this);
+        try {
+            orderManager.startCheckout(this);
+        } catch (InvalidPaymentException e) {
+            Log.e(TAG, "startPayment: ", e);
+        }
 
     }
 
