@@ -142,7 +142,8 @@ public class StoreManager {
         try {
             paymentMgr.addItems(ORDERS);
         } catch (InvalidPaymentException e) {
-            e.printStackTrace();
+            Log.e(TAG, "checkoutWithBrowser: ", e);
+            showErrorDialog(context, e.getMessage());
         }
         paymentMgr.openPaymentBrowser(context);
     }
