@@ -75,6 +75,33 @@ public class MainActivity extends YenePayPaymentActivity {
     }
 
 ```
+
+If you want your app to handle payment responses even after it has been closed. You need to configure globally pending intents for the response.
+
+One of a good places to put that logic can be in your Application class like this.
+
+```Java
+public class ShopApp extends Application {
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        PendingIntent completionIntent = PendingIntent.getActivity(getApplicationContext(),
+                PaymentOrderManager.YENEPAY_CHECKOUT_REQ_CODE,
+                new Intent(getApplicationContext(), PaymentResponseActivity.class), 0);
+        PendingIntent cancelationIntent = PendingIntent.getActivity(getApplicationContext(),
+                PaymentOrderManager.YENEPAY_CHECKOUT_REQ_CODE,
+                new Intent(getApplicationContext(), PaymentResponseActivity.class), 0);
+        YenePayConfiguration.setDefaultInstance(new YenePayConfiguration.Builder(getApplicationContext())
+        .setGlobalCompletionIntent(completionIntent)
+        .setGlobalCancelIntent(cancelationIntent)
+        .build());
+    }
+}
+
+```
+
+## Validation
 Since version [0.0.10](https://github.com/YenePay/yenepay.sdk.android/releases/tag/0.0.10) payment will be validated by [PaymentOrderManager](https://github.com/YenePay/yenepay.sdk.android/blob/master/yeneSDK/src/main/java/com/yenepaySDK/PaymentOrderManager.java) when adding item and starting checkout methodsand checking out. Both will throw an [InvalidPaymentException](https://github.com/YenePay/yenepay.sdk.android/blob/master/yeneSDK/src/main/java/com/yenepaySDK/errors/InvalidPaymentException.java)
 
 ```Java
@@ -135,32 +162,19 @@ Since version [0.0.10](https://github.com/YenePay/yenepay.sdk.android/releases/t
 
 ```
 
-This is all it takes to accept payment from your android app. 
+This is all it takes to accept payment using [YenePay](https://www.yenepay.com) from your android app. 
 
-If you want your app to handle payment responses even after it has been closed. You need to configure globally pending intents for the response.
+## The sample shop simulator app
+To run the sample app download or clone the repository then build and run the project
+![YenePay Shop Simulator Sample App](https://github.com/YenePay/yenepay.sdk.android/blob/master/screenshots/device-2019-07-04-031141.png) ![YenePay Shop Simulator sample App](https://github.com/YenePay/yenepay.sdk.android/blob/master/screenshots/device-2019-07-04-031105.png)
 
-One of a good places to put that logic can be in your Application class like this.
+Before you start checking out orders you need to provide YenePay MerchantCode on for this app. Go to [YenePay Sandbox](https://sandbox.yenepay.com) to create a testing merchant account. You can find more info [here](https://commuity.yenepay.com).
 
-```Java
-public class ShopApp extends Application {
+Set your merchant code on the setting page of the app. If you are working the sandbox you have to enable the Use Sandbox setings on also.
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        PendingIntent completionIntent = PendingIntent.getActivity(getApplicationContext(),
-                PaymentOrderManager.YENEPAY_CHECKOUT_REQ_CODE,
-                new Intent(getApplicationContext(), PaymentResponseActivity.class), 0);
-        PendingIntent cancelationIntent = PendingIntent.getActivity(getApplicationContext(),
-                PaymentOrderManager.YENEPAY_CHECKOUT_REQ_CODE,
-                new Intent(getApplicationContext(), PaymentResponseActivity.class), 0);
-        YenePayConfiguration.setDefaultInstance(new YenePayConfiguration.Builder(getApplicationContext())
-        .setGlobalCompletionIntent(completionIntent)
-        .setGlobalCancelIntent(cancelationIntent)
-        .build());
-    }
-}
+![YenePay Shop Simulator Sample App](https://https://github.com/YenePay/yenepay.sdk.android/blob/master/screenshots/device-2019-07-04-031258.png)
 
-```
+
 **Note**
 If your app targets below Android API level 21 (LOLLIPOP) or if YenePay app is not installed on the user device, then configuring `YenePayConfiguration` with global PendingIntents like the above example is required to function return results properly.
 
