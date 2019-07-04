@@ -172,7 +172,7 @@ Before you start checking out orders you need to provide YenePay MerchantCode on
 
 Set your merchant code on the setting page of the app. If you are working the sandbox you have to enable the Use Sandbox setings on also.
 
-![YenePay Shop Simulator Sample App](https://https://github.com/YenePay/yenepay.sdk.android/blob/master/screenshots/device-2019-07-04-031258.png)
+![YenePay Shop Simulator Sample App](https://github.com/YenePay/yenepay.sdk.android/blob/master/screenshots/device-2019-07-04-031258.png)
 
 
 **Note**
