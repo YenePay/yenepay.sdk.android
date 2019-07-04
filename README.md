@@ -165,7 +165,7 @@ Since version [0.0.10](https://github.com/YenePay/yenepay.sdk.android/releases/t
 This is all it takes to accept payment using [YenePay](https://www.yenepay.com) from your android app. 
 
 ## The sample shop simulator app
-To run the sample app download or clone the repository then build and run the project
+To run the sample app download or clone the repository then build and run the project <br/>
 ![YenePay Shop Simulator Sample App](https://github.com/YenePay/yenepay.sdk.android/blob/master/screenshots/device-2019-07-04-031141.png) ![YenePay Shop Simulator sample App](https://github.com/YenePay/yenepay.sdk.android/blob/master/screenshots/device-2019-07-04-031105.png)
 
 Before you start checking out orders you need to provide YenePay MerchantCode on for this app. Go to [YenePay Sandbox](https://sandbox.yenepay.com) to create a testing merchant account. You can find more info [here](https://commuity.yenepay.com).
