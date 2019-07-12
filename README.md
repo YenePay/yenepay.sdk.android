@@ -9,7 +9,7 @@ repositories {
     maven { url "https://jitpack.io" }
 }
 ```
-Add the SDK package to your project's build.gradle file. Make sure to use the latest version. You can find the latest version [here](https://https://github.com/YenePay/yenepay.sdk.android/releases).
+Add the SDK package to your project's build.gradle file. Make sure to use the latest version. You can find the latest version [here](https://github.com/YenePay/yenepay.sdk.android/releases).
 ```gradle
 dependencies {
     ...
