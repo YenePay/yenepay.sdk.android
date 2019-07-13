@@ -9,7 +9,7 @@ repositories {
     maven { url "https://jitpack.io" }
 }
 ```
-Add the SDK package to your project's build.gradle file. Make sure to use the latest version. You can find the latest version [here](https://https://github.com/YenePay/yenepay.sdk.android/releases).
+Add the SDK package to your project's build.gradle file. Make sure to use the latest version. You can find the latest version [here](https://github.com/YenePay/yenepay.sdk.android/releases).
 ```gradle
 dependencies {
     ...
@@ -36,7 +36,7 @@ That's it your app can now start to accept payment using yenepay.
 
 ## Getting started
 
-To start accepting payment the easies way is extending your activity from [YenePayPaymentActivity](https://https://github.com/YenePay/yenepay.sdk.android/blob/master/yeneSDK/src/main/java/com/yenepaySDK/YenePayPaymentActivity.java). See the example below
+To start accepting payment the easies way is extending your activity from [YenePayPaymentActivity](https://github.com/YenePay/yenepay.sdk.android/blob/master/yeneSDK/src/main/java/com/yenepaySDK/YenePayPaymentActivity.java). See the example below
 
 ```Java
 public class MainActivity extends YenePayPaymentActivity {
