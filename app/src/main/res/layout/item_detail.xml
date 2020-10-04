@@ -1,14 +1,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context="com.example.sisay.shopsimulator.ItemDetailFragment"
-    android:padding="16dp">
-    <android.support.design.card.MaterialCardView
+    android:padding="16dp"
+    tools:context="com.example.sisay.shopsimulator.ItemDetailFragment">
+
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -18,6 +20,7 @@
                 android:id="@+id/item_image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:contentDescription="@string/app_name"
                 app:srcCompat="@drawable/item2" />
 
             <TextView
@@ -43,7 +46,7 @@
                 style="?android:attr/textAppearanceLarge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="right"
+                android:gravity="end"
                 android:padding="16dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textColor="@color/colorPrimaryDark"
@@ -56,38 +59,38 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <android.support.design.button.MaterialButton
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_add_to_cart"
                     style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Add to cart"
+                    android:text="@string/add_to_cart"
                     android:textAlignment="textStart"
                     android:textColor="@color/colorPrimaryDark"
                     app:icon="@drawable/ic_add_shopping_cart_black_24dp"
                     app:iconPadding="16dp"
                     app:iconTint="@color/colorPrimaryDark" />
 
-                <android.support.design.button.MaterialButton
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_checkout"
                     style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Checkout"
+                    android:text="@string/checkout"
                     android:textAlignment="textStart"
                     android:textColor="@color/colorPrimaryDark"
                     app:icon="@drawable/ic_monetization_on_black_24dp"
                     app:iconPadding="16dp"
                     app:iconTint="@color/colorPrimaryDark" />
 
-                <android.support.design.button.MaterialButton
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnPayViaWeb"
                     style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Checkout (Web)"
+                    android:text="@string/checkout_web"
                     android:textAlignment="textStart"
                     android:textColor="@color/colorPrimaryDark"
                     app:icon="@drawable/ic_open_in_browser_black_24dp"
@@ -97,7 +100,7 @@
 
         </LinearLayout>
 
-    </android.support.design.card.MaterialCardView>
+    </com.google.android.material.card.MaterialCardView>
 
 
     <EditText
@@ -106,17 +109,15 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="E4HBBYXD"
+        android:text="@string/e4hbbyxd"
         android:visibility="gone" />
 
 
     <LinearLayout
-        android:orientation="vertical"
+        android:id="@+id/paymentInfoContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/paymentInfoContainer"
-        android:visibility="gone">
+        android:orientation="vertical"
+        android:visibility="gone" />
 
-
-    </LinearLayout>
 </LinearLayout>

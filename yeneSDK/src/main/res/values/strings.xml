@@ -2,5 +2,14 @@
     <string name="app_name">YenePaySDK</string>
     <string name="certificate_host_name">www.yenepay.com</string>
     <string name="default_payment_request_cancelled_msg">YenePay Checkout Request Canceled</string>
+    <string name="yenepay_icon">YenePay Icon</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="sign_in">Sign in</string>
+    <string name="name">Name</string>
+    <string name="email_address">Email address</string>
+    <string name="password">Password</string>
+    <string name="create_account">Create Account</string>
+    <string name="already_a_member">Already a member?</string>
     <!--<string name="certificate_host_name">192.168.0.100</string>-->
 </resources>
