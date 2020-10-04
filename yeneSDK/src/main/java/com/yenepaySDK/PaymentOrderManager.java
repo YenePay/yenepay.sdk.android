@@ -1,15 +1,17 @@
 package com.yenepaySDK;
 
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 
 import com.yenepaySDK.errors.InvalidPaymentException;
 import com.yenepaySDK.handlers.PaymentHandlerActivity;
@@ -47,8 +49,8 @@ public class PaymentOrderManager implements Serializable {
     private String returnUrl;
     private String ipnUrl;
     private boolean useSandboxEnabled;
-    private boolean shoppingCartMode = true;
-    private Map<String, OrderedItem> items = new HashMap<String, OrderedItem>();
+    private boolean shoppingCartMode;
+    private Map<String, OrderedItem> items = new HashMap<>();
 
     private PaymentOrderManager(){
         shoppingCartMode = true;
@@ -60,7 +62,7 @@ public class PaymentOrderManager implements Serializable {
         this.merchantOrderId = merchantOrderId;
     }
     public List<OrderedItem> getItems(){
-        return new ArrayList<OrderedItem>(this.items.values());
+        return new ArrayList<>(this.items.values());
     }
     public String getMerchantCode() {
         return merchantCode;
@@ -193,7 +195,7 @@ public class PaymentOrderManager implements Serializable {
         args.putExtra(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_DISCOUNT, this.discount);
         args.putExtra(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_HANDLING_FEE, this.handlingFee);
         args.putExtra(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_SHIPPING_FEE, this.shippingFee);
-        args.putExtra(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_ITEMS, new ArrayList<OrderedItem>(getItems()));
+        args.putExtra(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_ITEMS, new ArrayList<>(getItems()));
         return args;
     }
 
@@ -331,7 +333,7 @@ public class PaymentOrderManager implements Serializable {
     }
 
     public static PaymentResponse parseResponse(Intent intent){
-        PaymentResponse response = null;
+        PaymentResponse response;
         if(intent.hasExtra(PaymentHandlerActivity.KEY_PAYMENT_RESPONSE)){
             response = (PaymentResponse)intent.getSerializableExtra(PaymentHandlerActivity.KEY_PAYMENT_RESPONSE);
         } else if(intent.getData() != null) {
@@ -394,9 +396,10 @@ public class PaymentOrderManager implements Serializable {
         public List<String> errors;
 
         public void showResultToast(Context context){
-            Toast.makeText(context, toString(), Toast.LENGTH_LONG);
+            Toast.makeText(context, toString(), Toast.LENGTH_LONG).show();
         }
 
+        @NonNull
         @Override
         public String toString(){
             if(errors != null && !errors.isEmpty()){

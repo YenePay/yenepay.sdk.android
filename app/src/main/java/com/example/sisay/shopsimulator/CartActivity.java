@@ -2,31 +2,28 @@ package com.example.sisay.shopsimulator;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.sisay.shopsimulator.store.StoreManager;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.yenepaySDK.model.OrderedItem;
 
 import java.util.List;
+import java.util.Locale;
 
 public class CartActivity extends ShopBaseActivity {
-
-    private RecyclerView mListView;
     private OrderedItemsRecyclerAdapter mListAdapter;
-    private TextView mCoutText;
+    private TextView mCountText;
     private TextView mTotalText;
     private View mBtnClear;
     private View mBtnCheckout;
@@ -51,12 +48,12 @@ public class CartActivity extends ShopBaseActivity {
         });
 
         mEmptyView = findViewById(R.id.empty_view);
-        mListView = findViewById(R.id.list_cart);
+        RecyclerView mListView = findViewById(R.id.list_cart);
         mListView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        mListAdapter = new OrderedItemsRecyclerAdapter(this, mCartUpdateListner);
+        mListAdapter = new OrderedItemsRecyclerAdapter(this, mCartUpdateListener);
 
         mListView.setAdapter(mListAdapter);
-        mCoutText = findViewById(R.id.txt_cart_items_count);
+        mCountText = findViewById(R.id.txt_cart_items_count);
         mTotalText = findViewById(R.id.txt_cart_total);
 
         mBtnClear = findViewById(R.id.btn_clear);
@@ -90,10 +87,15 @@ public class CartActivity extends ShopBaseActivity {
                 updateCartTotals();
             }
         });
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
-    private final OnCartUpdatedActionListner mCartUpdateListner = new OnCartUpdatedActionListner() {
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return super.onSupportNavigateUp();
+    }
+
+    private final OnCartUpdatedActionListener mCartUpdateListener = new OnCartUpdatedActionListener() {
         @Override
         public void onCartUpdated() {
             updateCartTotals();
@@ -102,24 +104,24 @@ public class CartActivity extends ShopBaseActivity {
 
     private void updateCartTotals() {
         mTotalText.setText(Utils.getAmountString(StoreManager.getCartTotal()));
-        mCoutText.setText(StoreManager.getCartItemsCount() + " - items");
+        mCountText.setText(String.format(Locale.ENGLISH, "%d - items", StoreManager.getCartItemsCount()));
 
-        int visibility = mListAdapter.getItemCount() > 0? View.VISIBLE: View.GONE;
+        int visibility = mListAdapter.getItemCount() > 0 ? View.VISIBLE : View.GONE;
         mBtnClear.setVisibility(visibility);
         mBtnCheckout.setVisibility(visibility);
         mCheckoutWeb.setVisibility(visibility);
         mEmptyView.setVisibility(mListAdapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
     }
 
-    public static class OrderedItemsRecyclerAdapter extends RecyclerView.Adapter<OrderedItemViewHolder>{
-        private final OnCartUpdatedActionListner mLitner;
+    public static class OrderedItemsRecyclerAdapter extends RecyclerView.Adapter<OrderedItemViewHolder> {
+        private final OnCartUpdatedActionListener mListener;
         private List<OrderedItem> mOrderedItems;
         private Context mContext;
 
-        public OrderedItemsRecyclerAdapter(Context context, OnCartUpdatedActionListner listner) {
+        public OrderedItemsRecyclerAdapter(Context context, OnCartUpdatedActionListener listener) {
             this.mContext = context;
             this.mOrderedItems = StoreManager.ORDERS;
-            this.mLitner = listner;
+            this.mListener = listener;
         }
 
         @NonNull
@@ -132,20 +134,20 @@ public class CartActivity extends ShopBaseActivity {
         @Override
         public void onBindViewHolder(@NonNull OrderedItemViewHolder viewHolder, int i) {
             final OrderedItem item = getItem(i);
-            if(StoreManager.ITEM_MAP.containsKey(item.getItemId())){
+            if (StoreManager.ITEM_MAP.containsKey(item.getItemId())) {
                 StoreManager.DummyItem storeItem = StoreManager.ITEM_MAP.get(item.getItemId());
                 viewHolder.itemImage.setImageResource(storeItem.imageResId);
             }
             viewHolder.itemName.setText(item.getItemName());
-            viewHolder.quantity.setText(String.format("Quantity - %d", item.getQuantity()));
+            viewHolder.quantity.setText(String.format(Locale.ENGLISH, "Quantity - %d", item.getQuantity()));
             viewHolder.total.setText(Utils.getAmountString(item.getItemTotalPrice()));
             viewHolder.addButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     StoreManager.addToCart(item.getItemId(), 1);
                     notifyDataSetChanged();
-                    if(mLitner != null){
-                        mLitner.onCartUpdated();
+                    if (mListener != null) {
+                        mListener.onCartUpdated();
                     }
                 }
             });
@@ -155,15 +157,15 @@ public class CartActivity extends ShopBaseActivity {
                 public void onClick(View view) {
                     StoreManager.removeFromCart(item.getItemId(), 1);
                     notifyDataSetChanged();
-                    if(mLitner != null){
-                        mLitner.onCartUpdated();
+                    if (mListener != null) {
+                        mListener.onCartUpdated();
                     }
                 }
             });
         }
 
-        public OrderedItem getItem(int position){
-            if (mOrderedItems == null){
+        public OrderedItem getItem(int position) {
+            if (mOrderedItems == null) {
                 return null;
             }
             return mOrderedItems.get(position);
@@ -171,12 +173,12 @@ public class CartActivity extends ShopBaseActivity {
 
         @Override
         public int getItemCount() {
-            return mOrderedItems != null? mOrderedItems.size(): 0;
+            return mOrderedItems != null ? mOrderedItems.size() : 0;
         }
 
     }
 
-    public static class OrderedItemViewHolder extends RecyclerView.ViewHolder{
+    public static class OrderedItemViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView itemImage;
         private TextView itemName;
@@ -184,6 +186,7 @@ public class CartActivity extends ShopBaseActivity {
         private TextView total;
         private FloatingActionButton addButton;
         private FloatingActionButton removeButton;
+
         public OrderedItemViewHolder(@NonNull View itemView) {
             super(itemView);
             itemImage = itemView.findViewById(R.id.item_image);
@@ -195,7 +198,7 @@ public class CartActivity extends ShopBaseActivity {
         }
     }
 
-    public interface OnCartUpdatedActionListner{
+    public interface OnCartUpdatedActionListener {
         void onCartUpdated();
     }
 

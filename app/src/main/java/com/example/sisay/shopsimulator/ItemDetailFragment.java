@@ -1,34 +1,20 @@
 package com.example.sisay.shopsimulator;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.Uri;
-import android.preference.PreferenceManager;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 
 import com.example.sisay.shopsimulator.store.StoreManager;
-import com.yenepaySDK.PaymentOrderManager;
 import com.yenepaySDK.PaymentResponse;
-import com.yenepaySDK.YenepayCheckOutIntentAction;
-import com.yenepaySDK.model.OrderedItem;
-
-import java.util.UUID;
 
 /**
  * A fragment representing a single Item detail screen.
@@ -79,20 +65,20 @@ public class ItemDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.item_detail, container, false);
-        paymentStatus = (TextView)rootView.findViewById(R.id.txtPaymentStatus);
-        objDump = (TextView)rootView.findViewById(R.id.txtObjDump);
-        paymentInfoContainer = (LinearLayout)rootView.findViewById(R.id.paymentInfoContainer);
+        paymentStatus = (TextView) rootView.findViewById(R.id.txtPaymentStatus);
+        objDump = (TextView) rootView.findViewById(R.id.txtObjDump);
+        paymentInfoContainer = (LinearLayout) rootView.findViewById(R.id.paymentInfoContainer);
         // Show the dummy content as text in a TextView.
         if (mItem != null) {
-            ((ImageView)rootView.findViewById(R.id.item_image)).setImageResource(mItem.imageResId);
+            ((ImageView) rootView.findViewById(R.id.item_image)).setImageResource(mItem.imageResId);
             ((TextView) rootView.findViewById(R.id.item_content)).setText(mItem.content);
             ((TextView) rootView.findViewById(R.id.item_detail)).setText(mItem.details);
             ((TextView) rootView.findViewById(R.id.item_price)).setText(String.format(getString(R.string.money_amount_format), mItem.price));
-            merchantCodeText = (EditText)rootView.findViewById(R.id.editMerchantCode);
+            merchantCodeText = (EditText) rootView.findViewById(R.id.editMerchantCode);
             rootView.findViewById(R.id.btnPayViaWeb).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(mListner != null){
+                    if (mListner != null) {
                         mListner.onItemWebCheckoutClicked(mItem);
                     }
                 }
@@ -100,7 +86,7 @@ public class ItemDetailFragment extends Fragment {
             rootView.findViewById(R.id.btn_checkout).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(mListner != null){
+                    if (mListner != null) {
                         mListner.onItemCheckoutClicked(mItem);
                     }
                 }
@@ -108,7 +94,7 @@ public class ItemDetailFragment extends Fragment {
             rootView.findViewById(R.id.btn_add_to_cart).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(mListner != null){
+                    if (mListner != null) {
                         mListner.onAddToCartClicked(mItem);
                     }
                 }
@@ -117,20 +103,21 @@ public class ItemDetailFragment extends Fragment {
         }
 
 
-
         return rootView;
     }
+
     private PaymentResponse response;
     TextView paymentStatus;
     TextView objDump;
     LinearLayout paymentInfoContainer;
+
     public void setPaymentResponse(PaymentResponse response) {
         this.response = response;
         populatePaymentInfo();
     }
 
     private void populatePaymentInfo() {
-        if(response != null){
+        if (response != null) {
             paymentInfoContainer.setVisibility(View.VISIBLE);
             paymentStatus.setText(response.getStatusText());
             objDump.setText(response.toString());
@@ -142,8 +129,8 @@ public class ItemDetailFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if(context instanceof ItemDetailActionListner){
-            mListner = (ItemDetailActionListner)context;
+        if (context instanceof ItemDetailActionListner) {
+            mListner = (ItemDetailActionListner) context;
         } else {
             throw new IllegalArgumentException("Activity must implement ItemDetailActionListner");
         }
@@ -157,7 +144,9 @@ public class ItemDetailFragment extends Fragment {
 
     public interface ItemDetailActionListner {
         void onItemCheckoutClicked(StoreManager.DummyItem item);
+
         void onItemWebCheckoutClicked(StoreManager.DummyItem item);
+
         void onAddToCartClicked(StoreManager.DummyItem item);
     }
 }

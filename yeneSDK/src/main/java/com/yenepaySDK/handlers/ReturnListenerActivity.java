@@ -1,13 +1,13 @@
 package com.yenepaySDK.handlers;
 
 import android.content.Intent;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.yenepaySDK.PaymentOrderManager;
 import com.yenepaySDK.PaymentResponse;
-import com.yenepaySDK.YenePayUriParser;
 
 public class ReturnListenerActivity extends AppCompatActivity {
 

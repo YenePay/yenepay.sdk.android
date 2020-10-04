@@ -57,7 +57,6 @@ public class Verification {
     public final String HOST_NAME;
 //    public static final String HOST_NAME = "192.168.137.1";
     private Context mContext;
-    private PasswordProtectionHandler mProtectionHandler;
     private char[] password = "y3n3p6y".toCharArray();
 
 
@@ -68,7 +67,7 @@ public class Verification {
     public Verification(Context context, PasswordProtectionHandler handler) {
         this.mContext = context;
         HOST_NAME = mContext.getString(R.string.certificate_host_name);
-        this.mProtectionHandler = handler != null? handler: new PasswordProtectionHandler();
+        PasswordProtectionHandler mProtectionHandler = handler != null ? handler : new PasswordProtectionHandler();
     }
 
     public boolean verify(PaymentResponse response) throws Exception {
@@ -271,7 +270,7 @@ public class Verification {
         return publicKey;
     }
 
-    public class PasswordProtectionHandler implements CallbackHandler {
+    public static class PasswordProtectionHandler implements CallbackHandler {
 
         private char[] lastPassword;
 

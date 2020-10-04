@@ -2,8 +2,8 @@ package com.yenepaySDK.verify;
 
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.core.deps.guava.io.ByteStreams;
+import androidx.test.platform.app.InstrumentationRegistry;
+import androidx.test.espresso.core.deps.guava.io.ByteStreams;
 import android.util.Base64;
 
 import com.yenepaySDK.PaymentResponse;

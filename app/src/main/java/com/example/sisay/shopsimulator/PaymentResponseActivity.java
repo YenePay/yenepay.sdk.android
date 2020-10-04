@@ -1,12 +1,11 @@
 package com.example.sisay.shopsimulator;
 
 import android.os.Bundle;
-import android.app.Activity;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.yenepaySDK.PaymentResponse;
 import com.yenepaySDK.YenePayPaymentActivity;
-import com.yenepaySDK.handlers.PaymentHandlerActivity;
 
 public class PaymentResponseActivity extends YenePayPaymentActivity {
 

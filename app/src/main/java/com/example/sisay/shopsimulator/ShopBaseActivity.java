@@ -1,15 +1,12 @@
 package com.example.sisay.shopsimulator;
 
-import android.content.Intent;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.widget.Toast;
 
-import com.yenepaySDK.PaymentOrderManager;
 import com.yenepaySDK.PaymentResponse;
 import com.yenepaySDK.YenePayPaymentActivity;
-import com.yenepaySDK.handlers.PaymentHandlerActivity;
 
 public class ShopBaseActivity extends YenePayPaymentActivity {
     private static final String TAG = "ShopBaseActivity";

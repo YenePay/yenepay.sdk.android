@@ -1,13 +1,14 @@
 package com.example.sisay.shopsimulator;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetDialogFragment;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.yenepaySDK.PaymentResponse;
 
@@ -67,7 +68,7 @@ public class PaymentResponseFragment extends BottomSheetDialogFragment {
             mPaymentStatus.setText(mResponse.getStatusText());
             mJsonDump.setText(mResponse.toString());
         } else {
-            mPaymentStatus.setText("Error occurred");
+            mPaymentStatus.setText(R.string.error_occurred);
             mJsonDump.setText(mErrorMessage);
         }
     }

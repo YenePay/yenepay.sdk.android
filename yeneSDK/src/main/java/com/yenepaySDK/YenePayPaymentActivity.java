@@ -3,11 +3,14 @@ package com.yenepaySDK;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 
 import com.yenepaySDK.errors.InvalidPaymentException;
 import com.yenepaySDK.handlers.PaymentHandlerActivity;
@@ -64,7 +67,7 @@ public class YenePayPaymentActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         if(mPaymentResponse != null){
             outState.putSerializable(PaymentHandlerActivity.KEY_PAYMENT_RESPONSE, mPaymentResponse);
@@ -141,13 +144,13 @@ public class YenePayPaymentActivity extends AppCompatActivity {
 
     public void onPaymentResponseArrived(PaymentResponse response) {
         if(response != null) {
-            Toast.makeText(this, response.toString(), Toast.LENGTH_SHORT);
+            Toast.makeText(this, response.toString(), Toast.LENGTH_SHORT).show();
         }
     }
 
     public void onPaymentResponseError(String error){
         if(!TextUtils.isEmpty(error)) {
-            Toast.makeText(this, "Payment Error: " + error, Toast.LENGTH_SHORT);
+            Toast.makeText(this, "Payment Error: " + error, Toast.LENGTH_SHORT).show();
         }
     }
 }

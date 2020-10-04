@@ -1,19 +1,16 @@
 package com.example.sisay.shopsimulator.store;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import android.util.Log;
 
-import com.example.sisay.shopsimulator.CartActivity;
 import com.example.sisay.shopsimulator.R;
 import com.example.sisay.shopsimulator.ShopBaseActivity;
 import com.example.sisay.shopsimulator.Utils;
 import com.yenepaySDK.PaymentOrderManager;
-import com.yenepaySDK.YenepayCheckOutIntentAction;
 import com.yenepaySDK.errors.InvalidPaymentException;
 import com.yenepaySDK.model.OrderedItem;
 
@@ -34,12 +31,12 @@ public class StoreManager {
     /**
      * An array of sample (dummy) items.
      */
-    public static final List<DummyItem> ITEMS = new ArrayList<DummyItem>();
+    public static final List<DummyItem> ITEMS = new ArrayList<>();
 
     /**
      * A map of sample (dummy) items, by ID.
      */
-    public static final Map<String, DummyItem> ITEM_MAP = new HashMap<String, DummyItem>();
+    public static final Map<String, DummyItem> ITEM_MAP = new HashMap<>();
 
     public static final List<OrderedItem> ORDERS = new ArrayList<>();
 
