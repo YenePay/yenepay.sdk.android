@@ -19,7 +19,7 @@ public class Payment {
     private Double tax1;
     private Double tax2;
     private Double handlingFee;
-    private Double shippingFee;
+    private Double deliveryFee;
     private Double discount;
 
     public boolean isUseSandbox() {
@@ -118,12 +118,12 @@ public class Payment {
         this.handlingFee = handlingFee;
     }
 
-    public Double getShippingFee() {
-        return shippingFee;
+    public Double getDeliveryFee() {
+        return deliveryFee;
     }
 
-    public void setShippingFee(Double shippingFee) {
-        this.shippingFee = shippingFee;
+    public void setDeliveryFee(Double deliveryFee) {
+        this.deliveryFee = deliveryFee;
     }
 
     public Double getDiscount() {

@@ -42,7 +42,7 @@ public class PaymentOrderManager implements Serializable {
     private double tax2;
     private double handlingFee;
     private double discount;
-    private double shippingFee;
+    private double deliveryFee;
     private double itemsTotal;
     private String returnUrl;
     private String ipnUrl;
@@ -102,12 +102,12 @@ public class PaymentOrderManager implements Serializable {
         this.discount = discount;
     }
 
-    public double getShippingFee() {
-        return shippingFee;
+    public double getDeliveryFee() {
+        return deliveryFee;
     }
 
-    public void setShippingFee(double shippingFee) {
-        this.shippingFee = shippingFee;
+    public void setDeliveryFee(double deliveryFee) {
+        this.deliveryFee = deliveryFee;
     }
 
     public String getMerchantOrderId() {
@@ -192,7 +192,7 @@ public class PaymentOrderManager implements Serializable {
         args.putExtra(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_TAX_2, this.tax2);
         args.putExtra(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_DISCOUNT, this.discount);
         args.putExtra(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_HANDLING_FEE, this.handlingFee);
-        args.putExtra(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_SHIPPING_FEE, this.shippingFee);
+        args.putExtra(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_DELIVERY_FEE, this.deliveryFee);
         args.putExtra(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_ITEMS, new ArrayList<OrderedItem>(getItems()));
         return args;
     }
@@ -263,7 +263,7 @@ public class PaymentOrderManager implements Serializable {
             errors.add("Invalid handlingFee value, must be 0 or positive");
         }
 
-        if(shippingFee < 0){
+        if(deliveryFee < 0){
             errors.add("Invalid shippingFee value, must be 0 or positive");
         }
         if(discount < 0){
@@ -361,7 +361,7 @@ public class PaymentOrderManager implements Serializable {
                 response.setGrandTotal(args.getDouble(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_ORDER_TOTAL, 0));
                 response.setHandlingFee(args.getDouble(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_HANDLING_FEE, 0));
                 response.setItemsTotal(args.getDouble(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_ITEMS_TOTAL, 0));
-                response.setShippingFee(args.getDouble(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_SHIPPING_FEE, 0));
+                response.setDeliveryFee(args.getDouble(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_DELIVERY_FEE, 0));
                 response.setTax1(args.getDouble(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_TAX_1, 0));
                 response.setTax2(args.getDouble(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_TAX_2, 0));
                 response.setMerchantCommisionFee(args.getDouble(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_COMMISION_FEE, 0));

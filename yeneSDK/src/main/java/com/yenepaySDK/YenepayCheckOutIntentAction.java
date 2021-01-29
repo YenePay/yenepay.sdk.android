@@ -25,7 +25,7 @@ public class YenepayCheckOutIntentAction {
     public static final String YENEPAY_INTENT_EXTRA_ITEMS_TOTAL = "com.yenepay.android.action.ITEMS_TOTAL";
     public static final String YENEPAY_INTENT_EXTRA_DISCOUNT = "com.yenepay.android.action.DISCOUNT";
     public static final String YENEPAY_INTENT_EXTRA_HANDLING_FEE = "com.yenepay.android.action.HANDLING_FEE";
-    public static final String YENEPAY_INTENT_EXTRA_SHIPPING_FEE = "com.yenepay.android.action.SHIPPING_FEE";
+    public static final String YENEPAY_INTENT_EXTRA_DELIVERY_FEE = "com.yenepay.android.action.DELIVERY_FEE";
     public static final String YENEPAY_INTENT_EXTRA_TAX_1 = "com.yenepay.android.action.TAX_1";
     public static final String YENEPAY_INTENT_EXTRA_TAX_2 = "com.yenepay.android.action.TAX_2";
     public static final String YENEPAY_INTENT_EXTRA_ORDER_TOTAL = "com.yenepay.android.action.ORDER_TOTAL";

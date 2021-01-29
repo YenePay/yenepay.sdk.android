@@ -38,7 +38,7 @@ public class PaymentOrderManagerTest {
         manager.setHandlingFee(50);
         manager.setIpnUrl("http://test.com/ipn");
         manager.setReturnUrl("http://test.com/return");
-        manager.setShippingFee(20);
+        manager.setDeliveryFee(20);
         manager.setTax1(12);
         manager.setTax2(45);
         manager.setShoppingCartMode(true);
@@ -142,7 +142,7 @@ public class PaymentOrderManagerTest {
     @Test
     public void testValidationShippingFee(){
         PaymentOrderManager manager = getTestOrderManager();
-        manager.setShippingFee(-10);
+        manager.setDeliveryFee(-10);
         PaymentOrderManager.PaymentValidationResult result = manager.validate();
         assertFalse(result.isValid);
     }

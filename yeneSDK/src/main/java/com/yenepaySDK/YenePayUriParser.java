@@ -1,10 +1,6 @@
 package com.yenepaySDK;
 
-import android.content.ClipData;
 import android.net.Uri;
-import android.net.UrlQuerySanitizer;
-import android.os.Bundle;
-import android.support.v4.util.Pair;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -15,8 +11,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
@@ -43,7 +37,7 @@ public class YenePayUriParser {
     public static final String YENEPAY_ITEMS = "Items";
     public static final String YENEPAY_DISCOUNT = "Discount";
     public static final String YENEPAY_HANDLING_FEE = "HandlingFee";
-    public static final String YENEPAY_SHIPPING_FEE = "ShippingFee";
+    public static final String YENEPAY_DELIVERY_FEE = "DeliveryFee";
     public static final String YENEPAY_CANCEL_URL = "CancelUrl";
     public static final String YENEPAY_SUCCESS_URL = "SuccessUrl";
     public static final String YENEPAY_FAILURE_URL = "FailureUrl";
@@ -117,8 +111,8 @@ public class YenePayUriParser {
         if(order.getHandlingFee() != null) {
             parameters.put(YENEPAY_HANDLING_FEE, String.valueOf(order.getHandlingFee()));
         }
-        if(order.getShippingFee() != null) {
-            parameters.put(YENEPAY_SHIPPING_FEE, String.valueOf(order.getShippingFee()));
+        if(order.getDeliveryFee() != null) {
+            parameters.put(YENEPAY_DELIVERY_FEE, String.valueOf(order.getDeliveryFee()));
         }
 
         if(order.getProcess().equals(YENEPAY_PROCESS_EXPRESS) && order.getItems().size() == 1){

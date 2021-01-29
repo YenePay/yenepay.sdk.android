@@ -35,7 +35,7 @@ public class PaymentResponse implements Serializable {
     private String statusDescription;
     private double itemsTotal;
     private double discount;
-    private double shippingFee;
+    private double deliveryFee;
     private double handlingFee;
     private double tax1;
     private double tax2;
@@ -162,12 +162,12 @@ public class PaymentResponse implements Serializable {
         this.paymentOrderId = paymentOrderId;
     }
 
-    public double getShippingFee() {
-        return shippingFee;
+    public double getDeliveryFee() {
+        return deliveryFee;
     }
 
-    public void setShippingFee(double shippingFee) {
-        this.shippingFee = shippingFee;
+    public void setDeliveryFee(double deliveryFee) {
+        this.deliveryFee = deliveryFee;
     }
 
     public int getStatus() {
@@ -407,7 +407,7 @@ public class PaymentResponse implements Serializable {
                 ", statusDescription='" + statusDescription + '\'' +
                 ", itemsTotal=" + itemsTotal +
                 ", discount=" + discount +
-                ", shippingFee=" + shippingFee +
+                ", shippingFee=" + deliveryFee +
                 ", handlingFee=" + handlingFee +
                 ", tax1=" + tax1 +
                 ", tax2=" + tax2 +
