@@ -15,7 +15,7 @@ public class OrderedItem implements Serializable {
     private String itemName;
     private double unitPrice;
     private int quantity;
-
+    public OrderedItem(){}
     public OrderedItem(String itemId, String itemName, int quantity, double unitPrice) {
         this.itemId = itemId;
         this.itemName = itemName;

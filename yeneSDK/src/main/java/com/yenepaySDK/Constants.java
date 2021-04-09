@@ -14,4 +14,5 @@ public class Constants {
     public static final String CHECKOUT_SERVER_URL = "https://www.yenepay.com/checkout/";
 //    public static final String CHECKOUT_SERVER_URL = "http://192.168.0.100/checkout/";
     public static final String SANDBOX_CHECKOUT_SERVER_URL = "https://test.yenepay.com/";
+    public static final String DEFAULT_CURRENCY = "ETB";
 }

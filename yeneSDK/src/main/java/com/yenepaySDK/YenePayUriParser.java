@@ -50,6 +50,7 @@ public class YenePayUriParser {
     public static final String YENEPAY_TRANSACTION_CODE = "TransactionCode";
     public static final String YENEPAY_TOTAL_AMOUNT = "TotalAmount";
     public static final String YENEPAY_ERROR_MSG = "ErrorMsg";
+    public static final String YENEPAY_CURRENCY = "Currency";
 
     private boolean isMultipleItem;
     private int itemsCount;
@@ -114,7 +115,11 @@ public class YenePayUriParser {
         if(order.getDeliveryFee() != null) {
             parameters.put(YENEPAY_DELIVERY_FEE, String.valueOf(order.getDeliveryFee()));
         }
-
+        if(!TextUtils.isEmpty(order.getCurrency())) {
+            parameters.put(YENEPAY_CURRENCY, order.getCurrency());
+        } else {
+            parameters.put(YENEPAY_CURRENCY, Constants.DEFAULT_CURRENCY);
+        }
         if(order.getProcess().equals(YENEPAY_PROCESS_EXPRESS) && order.getItems().size() == 1){
             OrderedItem singleItem = order.getItems().get(0);
             if(singleItem.getItemId() != null) {
@@ -178,6 +183,7 @@ public class YenePayUriParser {
         }
         response.setPaymentOrderId(uri.getQueryParameter(YENEPAY_TRANSACTION_ID));
         response.setOrderCode(uri.getQueryParameter(YENEPAY_TRANSACTION_CODE));
+        response.setCurrency(uri.getQueryParameter(YENEPAY_CURRENCY));
         String amt = uri.getQueryParameter(YENEPAY_TOTAL_AMOUNT);
         if(!TextUtils.isEmpty(amt)) {
             amt = amt.replace(",", "");

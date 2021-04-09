@@ -38,6 +38,7 @@ public class PaymentOrderManager implements Serializable {
     private String merchantCode;
     private String merchantOrderId;
     private String paymentProcess = PROCESS_EXPRESS;
+    private String currency = Constants.DEFAULT_CURRENCY;
     private double tax1;
     private double tax2;
     private double handlingFee;
@@ -193,6 +194,7 @@ public class PaymentOrderManager implements Serializable {
         args.putExtra(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_DISCOUNT, this.discount);
         args.putExtra(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_HANDLING_FEE, this.handlingFee);
         args.putExtra(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_DELIVERY_FEE, this.deliveryFee);
+        args.putExtra(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_CURRENCY, this.currency);
         args.putExtra(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_ITEMS, new ArrayList<OrderedItem>(getItems()));
         return args;
     }
@@ -327,6 +329,7 @@ public class PaymentOrderManager implements Serializable {
         payment.setFailureUrl(getReturnUrl());
         payment.setIpnUrl(getIpnUrl());
         payment.setItems(getItems());
+        payment.setCurrency(getCurrency());
         return payment;
     }
 
@@ -354,6 +357,7 @@ public class PaymentOrderManager implements Serializable {
                 response.setInvoiceId(args.getString(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_INVOICE_ID, ""));
                 response.setMerchantCode(args.getString(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_MERCHANT_ID));
                 response.setMerchantOrderId(args.getString(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_MERCHANT_ORDER_ID));
+                response.setCurrency(args.getString(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_CURRENCY));
                 response.setStatusText(args.getString(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_STATUS_TEXT));
                 response.setStatus(args.getInt(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_STATUS, -1));
                 //response.setItemsCount(args.getInt(YenepayCheckOutIntentAction.YENEPAY_INTENT_EXTRA_ITEMS, -1));
@@ -382,6 +386,14 @@ public class PaymentOrderManager implements Serializable {
 
     public void setShoppingCartMode(boolean shoppingCartMode) {
         this.shoppingCartMode = shoppingCartMode;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 
     public static class PaymentValidationResult {

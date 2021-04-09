@@ -49,7 +49,7 @@ public class PaymentResponse implements Serializable {
     private String merchantId;
     private double transactionFee;
     private String signature;
-
+    private String currency;
     public String getCustomerEmail() {
         return customerEmail;
     }
@@ -418,5 +418,13 @@ public class PaymentResponse implements Serializable {
                 ", itemsCount=" + itemsCount + '\'' +
                 ", customerCode=" + customerCode +
                 '}';
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 }

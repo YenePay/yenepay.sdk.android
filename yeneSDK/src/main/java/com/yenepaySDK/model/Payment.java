@@ -1,5 +1,7 @@
 package com.yenepaySDK.model;
 
+import com.yenepaySDK.Constants;
+
 import java.util.List;
 
 /**
@@ -21,6 +23,7 @@ public class Payment {
     private Double handlingFee;
     private Double deliveryFee;
     private Double discount;
+    private String currency = Constants.DEFAULT_CURRENCY;
 
     public boolean isUseSandbox() {
         return useSandbox;
@@ -132,5 +135,13 @@ public class Payment {
 
     public void setDiscount(Double discount) {
         this.discount = discount;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 }
