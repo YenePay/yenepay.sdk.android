@@ -17,6 +17,12 @@
         android:defaultValue="true"
         android:key="pref_use_sandbox"
         android:title="@string/pref_title_use_sandbox" />
+    <ListPreference
+        android:defaultValue="ETB"
+        android:entries="@array/pref_available_currencies"
+        android:entryValues="@array/pref_available_currencies_values"
+        android:key="store_currency"
+        android:title="Shop Currency" />
 
 
 </PreferenceScreen>

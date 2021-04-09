@@ -178,6 +178,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // updated to reflect the new value, per the Android Design
             // guidelines.
             bindPreferenceSummaryToValue(findPreference("merchant_code"));
+            bindPreferenceSummaryToValue(findPreference("store_currency"));
         }
 
         @Override

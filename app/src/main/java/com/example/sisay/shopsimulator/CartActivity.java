@@ -28,6 +28,7 @@ public class CartActivity extends ShopBaseActivity {
     private OrderedItemsRecyclerAdapter mListAdapter;
     private TextView mCoutText;
     private TextView mTotalText;
+    private TextView mTotalCurrency;
     private View mBtnClear;
     private View mBtnCheckout;
     private View mCheckoutWeb;
@@ -58,6 +59,7 @@ public class CartActivity extends ShopBaseActivity {
         mListView.setAdapter(mListAdapter);
         mCoutText = findViewById(R.id.txt_cart_items_count);
         mTotalText = findViewById(R.id.txt_cart_total);
+        mTotalCurrency = findViewById(R.id.item_currency);
 
         mBtnClear = findViewById(R.id.btn_clear);
         mBtnClear.setOnClickListener(new View.OnClickListener() {
@@ -103,6 +105,7 @@ public class CartActivity extends ShopBaseActivity {
     private void updateCartTotals() {
         mTotalText.setText(Utils.getAmountString(StoreManager.getCartTotal()));
         mCoutText.setText(StoreManager.getCartItemsCount() + " - items");
+        mTotalCurrency.setText(Utils.getStoreCurrency(this));
 
         int visibility = mListAdapter.getItemCount() > 0? View.VISIBLE: View.GONE;
         mBtnClear.setVisibility(visibility);

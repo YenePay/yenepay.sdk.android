@@ -40,6 +40,7 @@ public class ItemListActivity extends ShopBaseActivity {
      */
     private boolean mTwoPane;
     private SwipeRefreshLayout swipeRefreshContainer;
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,9 +68,9 @@ public class ItemListActivity extends ShopBaseActivity {
             }
         });
 
-        View recyclerView = findViewById(R.id.item_list);
+        recyclerView = findViewById(R.id.item_list);
         assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
+        setupRecyclerView(recyclerView);
 
         if (findViewById(R.id.item_detail_container) != null) {
             // The detail container view will be present only in the
@@ -81,14 +82,14 @@ public class ItemListActivity extends ShopBaseActivity {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(StoreManager.ITEMS));
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, StoreManager.ITEMS));
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.menu_settings){
             Intent intent = new Intent(this, SettingsActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, 111);
             return true;
         } else if(item.getItemId() == R.id.menu_up){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -107,15 +108,23 @@ public class ItemListActivity extends ShopBaseActivity {
         return true;
     }
 
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == 111){
+            setupRecyclerView(recyclerView);
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
     public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
         private final List<StoreManager.DummyItem> mValues;
+        private final String mCurrency;
 
-        public SimpleItemRecyclerViewAdapter(List<StoreManager.DummyItem> items) {
+        public SimpleItemRecyclerViewAdapter(Context context, List<StoreManager.DummyItem> items) {
             mValues = items;
+            mCurrency = Utils.getStoreCurrency(context);
         }
 
         @Override
@@ -133,6 +142,7 @@ public class ItemListActivity extends ShopBaseActivity {
             holder.mContentView.setText(item.details);
             holder.mImageView.setImageResource(item.imageResId);
             holder.mPriceView.setText(Utils.getAmountString(item.price));
+            holder.mCurrencyView.setText(mCurrency);
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -167,6 +177,7 @@ public class ItemListActivity extends ShopBaseActivity {
             public final TextView mContentView;
             public final ImageView mImageView;
             public final TextView mPriceView;
+            public final TextView mCurrencyView;
             public StoreManager.DummyItem mItem;
 
             public ViewHolder(View view) {
@@ -176,6 +187,7 @@ public class ItemListActivity extends ShopBaseActivity {
                 mContentView = view.findViewById(R.id.txt_quantity);
                 mImageView = view.findViewById(R.id.item_image);
                 mPriceView = view.findViewById(R.id.txt_price);
+                mCurrencyView = view.findViewById(R.id.txt_currency);
             }
 
             @Override

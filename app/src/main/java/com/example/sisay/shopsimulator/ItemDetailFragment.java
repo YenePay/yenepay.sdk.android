@@ -89,6 +89,7 @@ public class ItemDetailFragment extends Fragment {
             ((TextView) rootView.findViewById(R.id.item_detail)).setText(mItem.details);
             ((TextView) rootView.findViewById(R.id.item_price)).setText(String.format(getString(R.string.money_amount_format), mItem.price));
             merchantCodeText = (EditText)rootView.findViewById(R.id.editMerchantCode);
+            ((TextView) rootView.findViewById(R.id.item_currency)).setText(Utils.getStoreCurrency(requireContext()));
             rootView.findViewById(R.id.btnPayViaWeb).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

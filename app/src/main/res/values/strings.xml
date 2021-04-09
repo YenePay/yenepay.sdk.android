@@ -1,9 +1,20 @@
 <resources>
     <string name="app_name">Shop Simulator</string>
     <string name="title_item_detail">Item Detail</string>
-    <string name="money_amount_format">%1$,.2f Br.</string>
+    <string name="money_amount_format">%1$,.2f</string>
     <string name="title_activity_settings">Settings</string>
-
+    <string-array name="pref_available_currencies">
+        <item>Ethiopian Birr</item>
+        <item>Us Dollar</item>
+        <item>Euro</item>
+        <item>UK Pound</item>
+    </string-array>
+    <string-array name="pref_available_currencies_values">
+        <item>ETB</item>
+        <item>USD</item>
+        <item>EUR</item>
+        <item>GBP</item>
+    </string-array>
     <!-- Strings related to Settings -->
 
     <!-- Example General settings -->
